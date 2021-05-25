@@ -6,6 +6,13 @@
   "icons": {
     "48": "icon48.png"
   },
+  "permissions": [
+    "tabs"
+  ],
+  "host_permissions": ["https://www.notion.so/*"],
+  "background": {
+    "service_worker": "background.js"
+  },
   "content_scripts": [
     {
       "matches": ["https://www.notion.so/*"],
