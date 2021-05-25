@@ -1,0 +1,15 @@
+{
+  "name": "notion-plus-icon",
+  "manifest_version": 3,
+  "version": "1.0.0",
+  "description": "use more icon for notion",
+  "icons": {
+    "48": "icon48.png"
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://www.notion.so/*"],
+      "js": ["content.js"]
+    }
+  ]
+}

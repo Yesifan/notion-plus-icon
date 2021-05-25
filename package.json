@@ -1,0 +1,27 @@
+{
+  "name": "notion-plus-icon",
+  "version": "1.0.0",
+  "description": "use more icon for notion",
+  "scripts": {
+    "build": "webpack --config config/webpack.config.js",
+    "start": "webpack --config config/webpack.config.js --watch"
+  },
+  "keywords": [
+    "notion"
+  ],
+  "license": "ISC",
+  "devDependencies": {
+    "@babel/core": "^7.14.3",
+    "@babel/preset-env": "^7.14.2",
+    "@babel/preset-react": "^7.13.13",
+    "@types/chrome": "^0.0.141",
+    "babel-loader": "^8.2.2",
+    "copy-webpack-plugin": "^9.0.0",
+    "css-loader": "^5.2.6",
+    "style-loader": "^2.0.0",
+    "ts-loader": "^9.2.2",
+    "typescript": "^4.2.4",
+    "webpack": "^5.37.1",
+    "webpack-cli": "^4.7.0"
+  }
+}
