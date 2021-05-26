@@ -18,10 +18,16 @@ const config = {
     alias: {
       '@': path.resolve(__dirname, 'src')
     },
+    extensions: ['.ts', '.tsx', '...'],
   },
   module: {
     strictExportPresence: true,
     rules: [
+      {
+        test: /\.tsx?$/,
+        loader: "ts-loader",
+        exclude: /node_modules/,
+      },
       {
         test: /\.jsx?$/,
         exclude: /node_modules/,
@@ -60,11 +66,6 @@ const config = {
           },
         ],
         include: /\.module\.css$/,
-      },
-      {
-        test: /\.tsx?$/,
-        loader: "ts-loader",
-        exclude: /node_modules/,
       },
       {
         test: [/\.bmp$/, /\.gif$/, /\.jpe?g$/, /\.png$/],

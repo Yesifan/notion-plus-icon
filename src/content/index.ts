@@ -1,16 +1,33 @@
+import * as React from 'react';
+import * as ReactDom from 'react-dom';
 import { parsePageId } from 'notion-utils';
+
+import { getIconDom, getIconPanel } from './dom';
+
+import Tab from './components/tab';
+
+const { runtime } = chrome;
 
 const pageId = parsePageId(location.href);
 console.log('notion-plus-icon load', pageId);
 
-setTimeout(()=>{
-  console.log('2s.....')
+let icon:Element;
 
-  const iconButton = document.querySelector('.notion-frame .notion-scroller .notion-record-icon>div');
-
-  console.log(iconButton)
-},2000)
-
-chrome.runtime.onMessage.addListener((message)=>{
-  console.log(message)
+runtime.onMessage.addListener(async message => {
+  icon && clearLastEvent(icon);
+  icon = await getIconDom();
+  icon.addEventListener('click',handleIconClick);
+  console.log(icon);
 })
+
+function clearLastEvent(icon:Element){
+  icon.removeEventListener('click', handleIconClick)
+}
+
+async function handleIconClick(){
+  const panel = await getIconPanel();
+  const { tab } = panel;
+  console.log('handleIconClick', tab);
+  ReactDom.render(React.createElement(Tab), tab);
+}
+
