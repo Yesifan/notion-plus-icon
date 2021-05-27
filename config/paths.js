@@ -5,6 +5,7 @@ const src = path.join(__dirname, "../src");
 const resolveSrc = _path => path.resolve(src, _path)
 
 module.exports = {
+  src,
   entry:{
     content: resolveSrc('content/index.ts'),
     background: resolveSrc('background/index.ts'),

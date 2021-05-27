@@ -15,7 +15,7 @@ interface ExElement extends Element {
   tabs?:ChildNode|null,
   plusTab?: Element|null,
   tabContainer?: Element|null,
-  content?: Element|null,
+  panelContainer?: Element|null,
 }
 
 export const getIconPanel = () => {
@@ -32,7 +32,7 @@ export const getIconPanel = () => {
       dom.tabs = tabs;
       dom.plusTab = plusTab;
       dom.tabContainer = tabContainer;
-      dom.content = content;
+      dom.panelContainer = content;
 
       resolve(dom);
     }else delay(100).then(getIconPanel).then(resolve);

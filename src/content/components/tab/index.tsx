@@ -1,16 +1,19 @@
 import * as React from 'react';
-import { Provider } from 'react-redux';
 
-import store, { useDispatch, useSelector, tabPluse } from '../store';
+import { useDispatch, useSelector, tabPluse } from '@/content/store';
+
+import Panel from '../panel';
 
 import { container, tab, underline } from './css';
 
-interface TabProps {
-  onClick?: () => void
+export interface TabProps {
+  onClick?: () => void,
+  panelContainer:Element
 }
 
-const Tab:React.FC<TabProps> = ({onClick}) => {
-  const [ hover, setHover ] = React.useState(false)
+const App:React.FC<TabProps> = props => {
+  const {onClick, panelContainer} = props;
+  const [ hover, setHover ] = React.useState(false);
   const selected = useSelector(state => state.selected);
   const dispatch = useDispatch();
 
@@ -25,9 +28,7 @@ const Tab:React.FC<TabProps> = ({onClick}) => {
 
   return (
     <div onClick={handleClick} style={container}>
-      <div
-        role="button"
-        tabIndex={-1}
+      <div role="button"  tabIndex={-1}
         style={tab(hover)}
         className="notion-focusable"
         onMouseOver={()=>handleHover(true)}
@@ -35,10 +36,9 @@ const Tab:React.FC<TabProps> = ({onClick}) => {
         Plus
       </div>
       {selected === "plus" && <div style={underline}/>}
+      {selected === "plus" && <Panel container={panelContainer}/>}
     </div>
   )
 }
-
-const App = () => <Provider store={store}><Tab/></Provider>
 
 export default App;

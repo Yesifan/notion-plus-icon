@@ -3,10 +3,12 @@ import { configureStore, createSlice } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useSelector as reduxUseSelector, useDispatch as reduxUseDispatch } from 'react-redux';
 
 export interface State {
+  prev: 'plus'|number|undefined,
   selected: 'plus'|number,
 }
 
 const initialState: Redux.PreloadedState<State> = {
+  prev: undefined,
   selected: 0
 }
 
@@ -15,9 +17,11 @@ const slice = createSlice({
   initialState,
   reducers: {
     tabPluse: (state) => {
+      state.prev = state.selected;
       state.selected = 'plus'
     },
     tabOther: (state, {payload}:{payload:number}) => {
+      state.prev = state.selected;
       state.selected = payload
     }, 
   },
