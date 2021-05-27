@@ -10,7 +10,7 @@ export const container:CSSProperties = {
   position: 'relative'
 }
 
-export const tab = (isHover:boolean):CSSProperties => ({
+export const tab:CSSProperties = {
   userSelect: 'none',
   transition: 'background 20ms ease-in 0s',
   cursor: 'pointer', display: 'inline-flex',
@@ -25,8 +25,7 @@ export const tab = (isHover:boolean):CSSProperties => ({
   paddingLeft: '8px',
   paddingRight: '8px',
   color: 'rgb(55, 53, 47)',
-  background: isHover?'rgba(55, 53, 47, 0.08)' : 'transparent'
-})
+}
 
 export const underline:CSSProperties = {
   borderBottom: '2px solid rgb(55, 53, 47)', 

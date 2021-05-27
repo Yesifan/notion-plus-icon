@@ -7,38 +7,51 @@ import Observer from './observer'
 import { getIconDom, getIconPanel } from './lib/dom';
 
 import App from './App';
+import store, { tabOther } from './store';
 
 const { runtime } = chrome;
 
-const pageId = parsePageId(location.href);
-const observer = new Observer();
+main();
 
-let icon:Element;
+function main(){
+  const observer = new Observer();
+  let pageId, icon:Node;
+  start();
 
-runtime.onMessage.addListener(async message => {
-  icon && clearLastEvent(icon);
-  icon = await getIconDom();
-  icon.addEventListener('click',strat);
-})
+  runtime.onMessage.addListener(async message => {
+    start();
+  })
 
-function clearLastEvent(icon:Element){
-  icon.removeEventListener('click', strat);
-}
+  async function start(){
+    pageId = parsePageId(location.href);
+    const newIcon = await getIconDom();
+    if(newIcon === icon) return;
+    icon = newIcon;
+    icon.addEventListener('click',addPanelEvent);
+  }
 
-async function strat(){
-  const panel = await getIconPanel();
-  const { plusTab, tabContainer, panelContainer } = panel;
-  if(tabContainer && plusTab && panelContainer){
-    observer.setContainer(tabContainer, panelContainer);
-    const handleClick = () => {};
+  async function addPanelEvent(){
+    store.dispatch(tabOther(0)); //reset selected 0
 
-    ReactDom.render(
-      React.createElement(App, { 
-        onClick: handleClick,
-        panelContainer:panelContainer
-      }), 
-      plusTab
-    );
+    const panel = await getIconPanel();
+    const { plusTab, tabContainer, panelContainer } = panel;
+    if(tabContainer && plusTab && panelContainer){
+      observer.setContainer(tabContainer, panelContainer);
+      ReactDom.render(
+        React.createElement(App, { 
+          panelContainer:panelContainer
+        }), 
+        plusTab
+      );
+    }
+  }
+
+  function clearLastEvent(icon:Element){
+    icon.removeEventListener('click', addPanelEvent);
   }
 }
+
+
+
+
 

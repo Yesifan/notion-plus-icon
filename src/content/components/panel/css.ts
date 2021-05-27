@@ -40,7 +40,6 @@ export const icon:CSSProperties = {
   width: '32px',
   height: '32px',
   fontSize: '24px',
-  background: 'rgba(55, 53, 47, 0.08)'
 }
 
 export const img = (url:string):CSSProperties => ({

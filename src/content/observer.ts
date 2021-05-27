@@ -24,7 +24,8 @@ export default class Observer {
   }
 
   reduxEvent(){
-    const { selected } = store.getState();
+    const { prev, selected } = store.getState();
+    if(prev === selected) return;
     const isPlus = selected === 'plus';
     this.changePanel(isPlus);
     this.changeSearch(isPlus);
