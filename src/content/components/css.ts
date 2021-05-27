@@ -31,7 +31,7 @@ export const tab = (isHover:boolean):CSSProperties => ({
 export const underline:CSSProperties = {
   borderBottom: '2px solid rgb(55, 53, 47)', 
   position: 'absolute', 
-  bottom: '-1px', 
+  bottom: '-7px', 
   left: '8px', 
   right: '8px'
 }

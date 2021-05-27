@@ -2,6 +2,8 @@ import * as React from 'react';
 import * as ReactDom from 'react-dom';
 import { parsePageId } from 'notion-utils';
 
+import TabEvent from './lib/tabEvent'
+
 import { getIconDom, getIconPanel } from './lib/dom';
 
 import Tab from './components/tab';
@@ -9,7 +11,7 @@ import Tab from './components/tab';
 const { runtime } = chrome;
 
 const pageId = parsePageId(location.href);
-console.log('notion-plus-icon load', pageId);
+const tabEvent = new TabEvent();
 
 let icon:Element;
 
@@ -26,10 +28,12 @@ function clearLastEvent(icon:Element){
 
 async function handleIconClick(){
   const panel = await getIconPanel();
-  const { tab } = panel;
-  console.log('handleIconClick', tab);
-  const handleClick = () => {};
-  
-  ReactDom.render(React.createElement(Tab, { onClick: handleClick }), tab);
+  const { plusTab, tabContainer } = panel;
+  if(tabContainer && plusTab){
+    tabEvent.setContainer(tabContainer);
+    const handleClick = () => {};
+
+    ReactDom.render(React.createElement(Tab, { onClick: handleClick }), plusTab);
+  }
 }
 

@@ -12,24 +12,26 @@ export const getIconDom = () => {
 }
 
 interface ExElement extends Element {
-  tab:Element|null,
-  tabContainer: Element|null,
-  content: Element|null,
+  tabs?:ChildNode|null,
+  plusTab?: Element|null,
+  tabContainer?: Element|null,
+  content?: Element|null,
 }
 
 export const getIconPanel = () => {
   return new Promise<ExElement>(resolve => {
     const dom:ExElement|null = document.querySelector(PANEL_SELECTOR);
     if(dom) {
-      const tab = document.createElement('div');
+      const plusTab = document.createElement('div');
       const content = dom.querySelector('.notion-scroller');
       const tabContainer = dom.querySelector('div>div>div:first-child');
       const tabs = tabContainer?.firstChild;
 
-      tabs?.insertBefore(tab, tabs.lastChild);
+      tabs?.insertBefore(plusTab, tabs.lastChild);
 
+      dom.tabs = tabs;
+      dom.plusTab = plusTab;
       dom.tabContainer = tabContainer;
-      dom.tab = tab;
       dom.content = content;
 
       resolve(dom);

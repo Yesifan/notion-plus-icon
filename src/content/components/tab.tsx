@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Provider } from 'react-redux';
 
-import store, { useDispatch, useSelector } from '../store';
+import store, { useDispatch, useSelector, tabPluse } from '../store';
 
 import { container, tab, underline } from './css';
 
@@ -15,7 +15,7 @@ const Tab:React.FC<TabProps> = ({onClick}) => {
   const dispatch = useDispatch();
 
   const handleClick = () => {
-    dispatch({ type: 'SELECTED' })
+    dispatch(tabPluse());
     onClick?.()
   }
 
@@ -23,21 +23,22 @@ const Tab:React.FC<TabProps> = ({onClick}) => {
     setHover(isHover)
   }
 
-  return <Provider store={store}>
-    <div
-      onClick={handleClick}
-      style={container}>
-      <div 
+  return (
+    <div onClick={handleClick} style={container}>
+      <div
+        role="button"
+        tabIndex={-1}
         style={tab(hover)}
         className="notion-focusable"
-        role="button" tabIndex={-1}
         onMouseOver={()=>handleHover(true)}
         onMouseOut={()=>handleHover(false)}>
         Plus
       </div>
-      {selected && <div style={underline}/>}
+      {selected === "plus" && <div style={underline}/>}
     </div>
-  </Provider>
+  )
 }
 
-export default Tab;
+const App = () => <Provider store={store}><Tab/></Provider>
+
+export default App;
