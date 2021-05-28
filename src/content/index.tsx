@@ -11,9 +11,9 @@ main();
 function main(){
   const observer = new Observer();
   observer.subscribe(()=>{
-    const { pluseTabContainer, panelContainer } = observer;
-    if(pluseTabContainer && panelContainer){
-      render(<App panelContainer={panelContainer}/>, pluseTabContainer);
+    const { pageId, pluseTabContainer, panelContainer } = observer;
+    if(pageId && pluseTabContainer && panelContainer){
+      render(<App panelContainer={panelContainer} pageId={pageId}/>, pluseTabContainer);
     }
   })
 

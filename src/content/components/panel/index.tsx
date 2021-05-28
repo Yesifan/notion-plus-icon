@@ -4,11 +4,12 @@ import Hover from '../hover';
 
 import * as style from './css';
 
-interface Props {
+export interface PanelProps {
+  pageId: string
   container:Element
 }
 
-const App:React.FC<Props> = ({container}) => {
+const App:React.FC<PanelProps> = ({container}) => {
   return createPortal(
     <div style={style.columnFlex}>
       <div style={{flexGrow: 1}}>
