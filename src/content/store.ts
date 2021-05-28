@@ -1,13 +1,14 @@
 import * as Redux from 'redux';
-import { configureStore, createSlice } from '@reduxjs/toolkit';
+import { configureStore, createSlice, PayloadAction as Action } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useSelector as reduxUseSelector, useDispatch as reduxUseDispatch } from 'react-redux';
 
 import { parsePageId } from 'notion-utils';
 
+type TabType = number| 'plus';
 export interface State {
-  prev: 'plus'|number|undefined,
+  prev?: TabType,
   pageId?: string,
-  selected: 'plus'|number,
+  selected: TabType,
 }
 
 const initialState: Redux.PreloadedState<State> = {
@@ -20,17 +21,13 @@ const slice = createSlice({
   name: 'state',
   initialState,
   reducers: {
+    changeTab: (state, {payload}:Action<TabType>) => {
+      state.prev = state.selected;
+      state.selected = payload
+    },
     updatePageId(state){
       state.pageId = parsePageId(location.href);
     },
-    tabPluse: (state) => {
-      state.prev = state.selected;
-      state.selected = 'plus'
-    },
-    tabOther: (state, { payload }:{ payload:number }) => {
-      state.prev = state.selected;
-      state.selected = payload
-    }, 
   },
 })
 
@@ -41,7 +38,7 @@ const store = configureStore<State>({
 
 export default store;
 
-export const { updatePageId, tabPluse, tabOther } = slice.actions;
+export const { updatePageId, changeTab } = slice.actions;
 export type AppDispatch = typeof store.dispatch;
 
 export const useDispatch = () => reduxUseDispatch<AppDispatch>();

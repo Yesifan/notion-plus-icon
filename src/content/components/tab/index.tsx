@@ -1,4 +1,4 @@
-import { useDispatch, useSelector, tabPluse } from '@/content/store';
+import { useDispatch, useSelector, changeTab } from '@/content/store';
 
 import Hover from '../hover';
 import Panel from '../panel';
@@ -15,7 +15,7 @@ const App:React.FC<TabProps> = props => {
   const dispatch = useDispatch();
 
   const handleClick = () => {
-    dispatch(tabPluse());
+    dispatch(changeTab('plus'));
   }
 
   return (

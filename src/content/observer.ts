@@ -1,4 +1,4 @@
-import store, { updatePageId, tabOther } from './store';
+import store, { updatePageId, changeTab } from './store';
 
 import { getIconDom, getIconPanel } from './lib/dom';
 
@@ -25,7 +25,7 @@ export default class Observer {
 
   async update(){
     // reset selected 0
-    store.dispatch(tabOther(0));
+    store.dispatch(changeTab(0));
     store.dispatch(updatePageId());
     this.setIcon();
   }
@@ -66,7 +66,7 @@ export default class Observer {
   addNotionTabEvent(){
     this.tabs?.forEach((tab, index) => {
       tab.addEventListener('click', () => {
-        store.dispatch(tabOther(index));
+        store.dispatch(changeTab(index));
       })
     })
   }
