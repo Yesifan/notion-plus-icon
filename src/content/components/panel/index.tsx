@@ -1,17 +1,14 @@
-import * as React from 'react';
 import { createPortal } from 'react-dom';
-
-import { useDispatch, useSelector, tabPluse } from '@/content/store';
 
 import Hover from '../hover';
 
 import * as style from './css';
 
-interface TabProps {
+interface Props {
   container:Element
 }
 
-const App:React.FC<TabProps> = ({container}) => {
+const App:React.FC<Props> = ({container}) => {
   return createPortal(
     <div style={style.columnFlex}>
       <div style={{flexGrow: 1}}>

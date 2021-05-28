@@ -1,4 +1,4 @@
-import * as React from 'react';
+import { useState } from 'react';
 
 const isHover = (isHover:boolean):React.CSSProperties => {
   return isHover ?
@@ -7,7 +7,7 @@ const isHover = (isHover:boolean):React.CSSProperties => {
 }
 
 const App:React.FC<React.HTMLAttributes<HTMLDivElement>> = ({children, style, ...props}) => {
-  const [ hover, setHover ] = React.useState(false);
+  const [ hover, setHover ] = useState(false);
 
   const handleHover = (isHover:boolean) => {
     setHover(isHover)

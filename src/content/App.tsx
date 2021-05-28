@@ -1,4 +1,3 @@
-import * as React from 'react';
 import { Provider } from 'react-redux';
 
 import Tab, { TabProps } from './components/tab';

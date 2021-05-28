@@ -1,38 +1,69 @@
-import store, { tabOther } from './store';
+import store, { updatePageId, tabOther } from './store';
+
+import { getIconDom, getIconPanel } from './lib/dom';
 
 export default class Observer {
-  prevTab:number|'plus';
-  tabs?: Node[];
-  tabContainer?: Node;
-  panelContainer?: Node;
+  icon?: Element;
+  tabs?: Element[];
+  tabContainer?: Element;
+  panelContainer?: Element;
+  pluseTabContainer?: Element;
+  callback?: Function[] = [];
 
   constructor(){
-    const state = store.getState();
-    store.subscribe(() => this.reduxEvent());
-
-    this.prevTab = state.selected;
+    store.subscribe(() => this.addReduxEvent());
+    this.update();
   }
 
-  setContainer(tabContainer:Node, panelContainer:Node){
-    this.tabContainer = tabContainer;
-    this.panelContainer = panelContainer;
-    if(tabContainer.firstChild?.childNodes){
-      const [ emoji, upload, url ] = Array.from(tabContainer.firstChild?.childNodes);
-      this.tabs = [ emoji, upload, url ];
+  emit(){
+    this.callback?.forEach(callback => callback());
+  }
+
+  subscribe(callback:Function){
+    this.callback?.push(callback);
+  }
+
+  async update(){
+    // reset selected 0
+    store.dispatch(tabOther(0));
+    store.dispatch(updatePageId());
+    this.setIcon();
+  }
+
+  async setIcon(){
+    const icon = await getIconDom();
+    if(this.icon === icon) return;
+    this.icon = icon;
+    icon.addEventListener('click', () => this.setContainer());
+  }
+
+  async setContainer(){
+    const panel = await getIconPanel();
+    const { plusTab, tabContainer, panelContainer } = panel;
+    if(this.panelContainer === panelContainer) return;
+    if(plusTab && tabContainer && panelContainer){
+      this.pluseTabContainer = plusTab;
+      this.tabContainer = tabContainer;
+      this.panelContainer = panelContainer;
+      if(tabContainer.firstChild?.childNodes){
+        const [ emoji, upload, url ] = Array.from(tabContainer.firstChild?.childNodes) as Element[];
+        this.tabs = [ emoji, upload, url ];
+      }
+      this.addNotionTabEvent();
+      this.emit();
     }
-    this.Subject();
   }
 
-  reduxEvent(){
+  addReduxEvent(){
     const { prev, selected } = store.getState();
     if(prev === selected) return;
     const isPlus = selected === 'plus';
-    this.changePanel(isPlus);
-    this.changeSearch(isPlus);
-    this.changeUnderline(isPlus);
+    this.changeNotionPanel(isPlus);
+    this.changeNotionSearch(isPlus);
+    this.changeNotionUnderline(isPlus);
   }
 
-  Subject(){
+  addNotionTabEvent(){
     this.tabs?.forEach((tab, index) => {
       tab.addEventListener('click', () => {
         store.dispatch(tabOther(index));
@@ -40,7 +71,7 @@ export default class Observer {
     })
   }
 
-  changePanel(isPlus:boolean){
+  changeNotionPanel(isPlus:boolean){
     if(this.panelContainer?.childNodes){
       const panels = <HTMLElement[]>Array.from(this.panelContainer.childNodes);
       if(isPlus){
@@ -54,7 +85,7 @@ export default class Observer {
       }
     }
   }
-  changeSearch(isPlus:boolean){
+  changeNotionSearch(isPlus:boolean){
     if(this.tabContainer?.childNodes[1]){
       const search = <HTMLElement>this.tabContainer?.childNodes[1];
       if(isPlus){
@@ -64,7 +95,7 @@ export default class Observer {
       }
     }
   }
-  changeUnderline(isPlus:boolean){
+  changeNotionUnderline(isPlus:boolean){
     if(this.tabs){
       const { prev, selected } = store.getState();
       if(isPlus && typeof prev === 'number'){

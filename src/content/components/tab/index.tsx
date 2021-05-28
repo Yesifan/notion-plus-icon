@@ -1,5 +1,3 @@
-import * as React from 'react';
-
 import { useDispatch, useSelector, tabPluse } from '@/content/store';
 
 import Hover from '../hover';
@@ -8,7 +6,7 @@ import Panel from '../panel';
 import { container, tab, underline } from './css';
 
 export interface TabProps {
-  panelContainer:Element
+  panelContainer: Element
 }
 
 const App:React.FC<TabProps> = props => {
