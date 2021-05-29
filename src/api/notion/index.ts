@@ -2,7 +2,7 @@ import { v4 as uuid } from 'uuid';
 
 import { fetcher } from '../request';
 
-import * as Notion from './type';
+import * as Notion from '@/interface/notion';
 
 export function getPublicPageData(id:string){
   return fetcher<Notion.PublicPageData>('/api/v3/getPublicPageData', { 

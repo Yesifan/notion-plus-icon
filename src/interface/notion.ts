@@ -52,3 +52,9 @@ export interface ChunkInfo {
     space_id: string
   }
 }
+
+export interface UploadFileUrl {
+  url:string
+  signedGettUrl:string
+  signedPutUrl:string
+}
