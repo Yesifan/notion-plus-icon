@@ -21,8 +21,3 @@ function main(){
     observer.update();
   })
 }
-
-
-
-
-

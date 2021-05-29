@@ -15,6 +15,14 @@ export interface PublicPageData {
   canRequestAccess: boolean
 }
 
+export interface Chunk {
+  recordMap:{
+    block:{
+      [pageId:string]:ChunkInfo
+    }
+  }
+}
+
 export interface ChunkInfo {
   role: RoleType,
   value: {

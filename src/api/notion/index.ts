@@ -17,11 +17,11 @@ export function getPublicPageData(id:string){
   })
 }
 
-export function loadCachedPageChunk(pageId:string){
-  return fetcher<Notion.ChunkInfo>('/api/v3/getPublicPageData', {
+export function loadCachedPageChunk(id:string){
+  return fetcher<Notion.Chunk>('/api/v3/loadCachedPageChunk', {
     method:'post',
     body:{
-      pageId,
+      pageId: id,
       limit: 1,
       chunkNumber: 0,
       verticalColumns: false
@@ -50,7 +50,7 @@ export function setIcon(icon:string, pageId:string, spaceId:string, isLastEdited
     }
   }
 
-  return fetcher('/api/v3/saveTransactions', { 
+  return fetcher('/api/v3/saveTransactions', {
     method:'post',
     body: {
       requestId,

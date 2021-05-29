@@ -28,8 +28,6 @@ export default class Observer {
 
   async update(){
     this.pageId = parsePageId(location.href);
-    // reset selected 0
-    store.dispatch(changeTab(0));
     this.setIcon();
   }
 
@@ -41,6 +39,7 @@ export default class Observer {
   }
 
   async setContainer(){
+    store.dispatch(changeTab(0)); // reset selected 0
     const panel = await getIconPanel();
     const { plusTab, tabContainer, panelContainer } = panel;
     if(this.panelContainer === panelContainer) return;
@@ -88,6 +87,7 @@ export default class Observer {
       }
     }
   }
+
   changeNotionSearch(isPlus:boolean){
     if(this.tabContainer?.childNodes[1]){
       const search = <HTMLElement>this.tabContainer?.childNodes[1];
@@ -98,6 +98,7 @@ export default class Observer {
       }
     }
   }
+
   changeNotionUnderline(isPlus:boolean){
     if(this.tabs){
       const { prev, selected } = store.getState();
