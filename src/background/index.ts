@@ -1,16 +1,20 @@
-const { tabs } = chrome;
+const { tabs, webRequest } = chrome;
 
-interface Urlhistory {
-  [key: number]: string
-}
+const NOTION_URL = 'https://www.notion.so';
+const SAVE_TRANSACTIONS_URL = `${NOTION_URL}/api/v3/saveTransactions`;
 
-const urlhistory:Urlhistory = {}
+const prevUrl4id = new Map<number, string>()
 
-tabs.onUpdated.addListener(function(tabId, changeInfo) {
-  const oldUrl = urlhistory[tabId];
-  if(changeInfo.url){
-    if(oldUrl === changeInfo.url) return;
-    urlhistory[tabId] = changeInfo.url;
-    chrome.tabs.sendMessage(tabId, 'urlchagne');
+const activeTabs = new Map<number, chrome.tabs.Tab>();
+
+tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
+  if(!activeTabs.has(tabId)) {
+    activeTabs.set(tabId, tab);
+  }
+  const isUrlChange = changeInfo.url && (prevUrl4id.get(tabId) !== changeInfo.url);
+  const isNotion = changeInfo.url?.includes(NOTION_URL);
+  if(isUrlChange && isNotion){
+    prevUrl4id.set(tabId, <string>changeInfo.url);
+    tabs.sendMessage(tabId, 'urlchagne');
   }
 });

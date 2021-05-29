@@ -1,6 +1,8 @@
 import { createPortal } from 'react-dom';
 
 import Hover from '../hover';
+import Link from '../link';
+import Upload from '../upload';
 
 import { loadCachedPageChunk, setIcon } from '@/api/notion'
 
@@ -23,6 +25,10 @@ const setIcon4pageId = async (pageId:string, icon:string) =>{
 const App:React.FC<PanelProps> = ({pageId, container}) => {
   return createPortal(
     <div style={style.columnFlex}>
+      <div style={style.toolRow}>
+        <Upload/>
+        <Link/>
+      </div>
       <div style={{flexGrow: 1}}>
         <div style={style.padding}>
           <div style={style.iconContainer} onClick={()=>setIcon4pageId(pageId, '😀')}>

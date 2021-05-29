@@ -15,6 +15,12 @@ export const columnFlex:CSSProperties = {
   flexDirection: 'column'
 }
 
+export const toolRow = {
+  display: 'flex',
+  marginTop: '12px',
+  padding: '0 12px'
+}
+
 export const padding:CSSProperties = {
   paddingTop: 6,
   paddingBottom: 6

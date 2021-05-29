@@ -7,7 +7,8 @@
     "48": "icon48.png"
   },
   "permissions": [
-    "tabs"
+    "tabs",
+    "webRequest"
   ],
   "host_permissions": ["https://www.notion.so/*"],
   "background": {
