@@ -8,7 +8,7 @@
   },
   "permissions": [
     "tabs",
-    "webRequest"
+    "storage"
   ],
   "host_permissions": ["https://www.notion.so/*"],
   "background": {
