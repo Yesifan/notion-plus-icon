@@ -1,10 +1,12 @@
 import { createPortal } from 'react-dom';
 
+import { useGetStorage } from '../hooks';
+
 import Hover from '../hover';
 import Link from '../link';
 import Upload from '../upload';
 
-import { loadCachedPageChunk, setIcon } from '@/api/notion'
+import setIcon4pageId from '@/api/notion/icon'
 
 import * as style from './css';
 import { useCallback } from 'react';
@@ -14,16 +16,8 @@ export interface PanelProps {
   container:Element
 }
 
-const setIcon4pageId = async (pageId:string, icon:string) =>{
-  const pageChunk = await loadCachedPageChunk(pageId);
-  const blockInfo = pageChunk?.recordMap.block[pageId];
-  if(blockInfo){
-    const { space_id, collection_id } = pageChunk.recordMap.block[pageId].value;
-    return setIcon(icon, pageId, space_id, true, collection_id)
-  }
-}
-
 const App:React.FC<PanelProps> = ({pageId, container}) => {
+  const urls = useGetStorage();
   const setIcon = useCallback((icon:string)=>setIcon4pageId(pageId, icon), [pageId]);
 
   return createPortal(
@@ -34,13 +28,15 @@ const App:React.FC<PanelProps> = ({pageId, container}) => {
       </div>
       <div style={{flexGrow: 1}}>
         <div style={style.padding}>
-          <div style={style.iconContainer} onClick={()=>setIcon('😀')}>
-            <Hover className="notion-focusable" role="button" tabIndex={-1} style={style.icon} >
-              <img alt="😀" aria-label="😀"
-                className="notion-emoji"
-                style={style.img('/images/twitter-emoji-spritesheet-64.png')}
-                src="data:image/gif;base64,R0lGODlhAQABAIAAAP///wAAACH5BAEAAAAALAAAAAABAAEAAAICRAEAOw==" />
-            </Hover>
+          <div style={style.iconContainer}>
+            {urls.map(url => (
+              <Hover key={url} className="notion-focusable" role="button" tabIndex={-1} style={style.icon} onClick={()=>setIcon(url)}>
+                <img alt="img-url" aria-label="img-url"
+                  className="notion-emoji"
+                  style={style.img}
+                  src={url} />
+              </Hover>
+            ))}
           </div>
         </div>
         <div></div>

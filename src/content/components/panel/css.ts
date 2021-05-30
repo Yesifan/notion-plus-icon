@@ -48,8 +48,7 @@ export const icon:CSSProperties = {
   fontSize: '24px',
 }
 
-export const img = (url:string):CSSProperties => ({
+export const img = {
   width: '24px',
-  height: '24px',
-  background: `url(${url}) 53.5714% 62.5% / 5700% 5700%`
-})
+  height: '24px'
+}
