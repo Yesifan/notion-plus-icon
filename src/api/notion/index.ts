@@ -29,7 +29,7 @@ export function loadCachedPageChunk(id:string){
   })
 }
 
-export function setIcon(icon:string, pageId:string, spaceId:string, isLastEditedTime = false, collectionId?:string){
+export function setIcon(icon:string, pageId:string, spaceId:string, collectionId?:string, fileId?:string){
   const requestId = uuid();
   const transactionId = uuid();
 
@@ -38,14 +38,15 @@ export function setIcon(icon:string, pageId:string, spaceId:string, isLastEdited
   const operations = [
     collectionId ? createOperation(collectionId, 'collection', [ "icon" ], icon) :
       createOperation(pageId, 'block', [ "format", "page_icon" ], icon),
-    isLastEditedTime && createOperation(pageId, 'block', [ "last_edited_time" ], timestamp)
+    collectionId && createOperation(pageId, 'block', [ "last_edited_time" ], timestamp),
+    fileId && collectionId && createOperation(collectionId, 'collection', [ "file_ids" ], { id: fileId }, "listAfter")
   ].filter(Boolean);
 
-  function createOperation (id:string, table:string, path:string[], args:any) {
+  function createOperation (id:string, table:string, path:string[], args:any, command="set") {
     return {
       pointer: { id, table, spaceId },
       path,
-      command: "set",
+      command,
       args
     }
   }

@@ -2,6 +2,8 @@ import * as Redux from 'redux';
 import { configureStore, createSlice, PayloadAction as Action } from '@reduxjs/toolkit';
 import { TypedUseSelectorHook, useSelector as reduxUseSelector, useDispatch as reduxUseDispatch } from 'react-redux';
 
+import { getUUID } from '@/content/lib/utils';
+
 type TabType = number| 'plus';
 export interface State {
   prev?: TabType,
@@ -17,8 +19,8 @@ const slice = createSlice({
   name: 'state',
   initialState,
   reducers: {
-    setPageId: (state, {payload}:Action<string>) => {
-      state.pageId = payload;
+    setPageId: (state) => {
+      state.pageId = getUUID(location.href);
     },
     changeTab: (state, {payload}:Action<TabType>) => {
       state.prev = state.selected;

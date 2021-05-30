@@ -1,3 +1,4 @@
+import { useMemo } from 'react';
 import { createPortal } from 'react-dom';
 
 import { useGetStorage } from '../hooks';
@@ -6,10 +7,9 @@ import Hover from '../components/hover';
 import Link from '../components/link';
 import Upload from '../components/upload';
 
-import setIcon4pageId from '@/api/notion/icon'
+import setIcon from '@/api/notion/icon'
 
 import * as style from './css';
-import { useCallback, useMemo } from 'react';
 
 const ROW_SIZE = 12;
 
@@ -19,7 +19,7 @@ export interface PanelProps {
 
 const App:React.FC<PanelProps> = ({container}) => {
   const urls = useGetStorage();
-  const setIcon = useCallback((icon:string)=>setIcon4pageId(icon), []);
+
   const wrap = useMemo(()=>{
     return urls.reduce<string[][]>((acc, url)=>{
       const current = acc[acc.length-1];
@@ -31,8 +31,8 @@ const App:React.FC<PanelProps> = ({container}) => {
   return createPortal(
     <div style={style.columnFlex}>
       <div style={style.toolRow}>
-        <Upload/>
-        <Link onClick={url => setIcon(url)}/>
+        <Upload onUpload={setIcon}/>
+        <Link onClick={setIcon}/>
       </div>
       <div style={{flexGrow: 1}}>
         <div style={style.padding}>

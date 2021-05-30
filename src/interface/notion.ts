@@ -55,6 +55,6 @@ export interface ChunkInfo {
 
 export interface UploadFileUrl {
   url:string
-  signedGettUrl:string
+  signedGetUrl:string
   signedPutUrl:string
 }
