@@ -3,6 +3,7 @@ import { createPortal } from 'react-dom';
 
 import { useGetStorage } from '../hooks';
 
+import Icon from '../components/icon';
 import Hover from '../components/hover';
 import Link from '../components/link';
 import Upload from '../components/upload';
@@ -41,10 +42,7 @@ const App:React.FC<PanelProps> = ({container}) => {
             <div style={{display:'flex'}} key={index}>
               {row.map(url => (
               <Hover key={url} className="notion-focusable" role="button" tabIndex={-1} style={style.icon} onClick={()=>setIcon(url)}>
-                <img alt="img-url" aria-label="img-url"
-                  className="notion-emoji"
-                  style={style.img}
-                  src={url} />
+                <Icon alt="img-url" aria-label="img-url" style={style.img} src={url}/>
               </Hover>))}
             </div>))}
           </div>

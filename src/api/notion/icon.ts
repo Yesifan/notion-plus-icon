@@ -8,7 +8,7 @@ const { storage } = chrome;
 export const ICON_STORAGE_KEY = "NOTION_PLUS_ICON_URLS";
 export const ICON_URL_LIMIT = 48;
 
-function storageSetIconUrl(url:string){
+export function cacheIconUrl(url:string){
   storage.sync.get(ICON_STORAGE_KEY, (items) => {
     const urls:string[] = items[ICON_STORAGE_KEY];
     if(urls){
@@ -26,6 +26,16 @@ function storageSetIconUrl(url:string){
   })
 }
 
+export function removeIconUrl(url:string){
+  storage.sync.get(ICON_STORAGE_KEY, (items) => {
+    const urls:string[] = items[ICON_STORAGE_KEY];
+    if(urls){
+      const _urls = urls.filter(_url => _url !== url);
+      storage.sync.set({[ICON_STORAGE_KEY]: _urls});
+    }
+  })
+}
+
 export default async function setIcon(url:string, signedGettUrl?:string){
   const pageId = store.getState().pageId;
   if(pageId){
@@ -36,10 +46,10 @@ export default async function setIcon(url:string, signedGettUrl?:string){
       if(signedGettUrl){
         const fileId = collection_id ? getUUID(url) : undefined;
         await setIcon4id(url, pageId, space_id, collection_id, fileId);
-        storageSetIconUrl(signedGettUrl);
+        cacheIconUrl(signedGettUrl);
       }else{
         await setIcon4id(url, pageId, space_id, collection_id);
-        storageSetIconUrl(url);
+        cacheIconUrl(url);
       }
     }
   }
