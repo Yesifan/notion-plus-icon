@@ -1,11 +1,9 @@
 import { parsePageId } from 'notion-utils';
-import store, { changeTab } from './store';
+import store, { setPageId, changeTab } from './store';
 
 import { getIconDom, getIconPanel } from './lib/dom';
 
 export default class Observer {
-  pageId?:string;
-
   icon?: Element;
   tabs?: Element[];
   tabContainer?: Element;
@@ -27,7 +25,7 @@ export default class Observer {
   }
 
   async update(){
-    this.pageId = parsePageId(location.href);
+    setPageId(parsePageId(location.href))
     this.setIcon();
   }
 

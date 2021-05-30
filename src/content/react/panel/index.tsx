@@ -14,13 +14,12 @@ import { useCallback, useMemo } from 'react';
 const ROW_SIZE = 12;
 
 export interface PanelProps {
-  pageId: string
   container:Element
 }
 
-const App:React.FC<PanelProps> = ({pageId, container}) => {
+const App:React.FC<PanelProps> = ({container}) => {
   const urls = useGetStorage();
-  const setIcon = useCallback((icon:string)=>setIcon4pageId(pageId, icon), [pageId]);
+  const setIcon = useCallback((icon:string)=>setIcon4pageId(icon), []);
   const wrap = useMemo(()=>{
     return urls.reduce<string[][]>((acc, url)=>{
       const current = acc[acc.length-1];
