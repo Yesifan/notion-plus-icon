@@ -1,6 +1,6 @@
 import { useRef } from 'react';
 import Button from '../button';
-import ClearIcon from '../icons/clear';
+import ClearIcon from '@/content/react/icons/clear';
 
 import * as styles from './css';
 

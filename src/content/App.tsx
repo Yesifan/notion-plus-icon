@@ -1,6 +1,6 @@
 import { Provider } from 'react-redux';
 
-import Tab, { TabProps } from './components/tab';
+import Tab, { TabProps } from './react/tab';
 
 import store from '@/content/store';
 

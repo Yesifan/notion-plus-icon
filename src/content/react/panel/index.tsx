@@ -2,9 +2,9 @@ import { createPortal } from 'react-dom';
 
 import { useGetStorage } from '../hooks';
 
-import Hover from '../hover';
-import Link from '../link';
-import Upload from '../upload';
+import Hover from '../components/hover';
+import Link from '../components/link';
+import Upload from '../components/upload';
 
 import setIcon4pageId from '@/api/notion/icon'
 

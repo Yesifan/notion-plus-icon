@@ -1,6 +1,6 @@
 import { useDispatch, useSelector, changeTab } from '@/content/store';
 
-import Hover from '../hover';
+import Hover from '../components/hover';
 import Panel, { PanelProps } from '../panel';
 
 import { container, tab, underline } from './css';
