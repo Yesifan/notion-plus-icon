@@ -16,7 +16,7 @@ const App:React.FC<LinkProps> = ({style, onClick, ...props}) => {
         type="url"
         value={value}
         style={styles.link}
-        onChange={e => setValue(e.target.value)}
+        onChange={value => setValue(value)}
         placeholder="Paste an image link…"/>
       <Button style={styles.button} onClick={() => value && onClick(value)}>
         +

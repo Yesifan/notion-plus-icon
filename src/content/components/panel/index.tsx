@@ -24,13 +24,11 @@ const App:React.FC<PanelProps> = ({pageId, container}) => {
   const wrap = useMemo(()=>{
     return urls.reduce<string[][]>((acc, url)=>{
       const current = acc[acc.length-1];
-      if(current.length >= ROW_SIZE){
-        acc.push([url])
-      }else{
-        current.push(url)
-      }
+      if(current.length >= ROW_SIZE) acc.push([url]);
+      else current.push(url);
       return acc;
     },[[]])}, [urls]);
+
   return createPortal(
     <div style={style.columnFlex}>
       <div style={style.toolRow}>

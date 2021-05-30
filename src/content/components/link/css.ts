@@ -1,5 +1,7 @@
 import { CSSProperties } from "react"
 
+import { block } from '../button/block.css';
+
 export const wrap:CSSProperties = {
   display: 'flex',
   alignItems: 'center',
@@ -11,5 +13,5 @@ export const link:CSSProperties = {
 }
 
 export const button:CSSProperties = {
-
+  ...block
 }

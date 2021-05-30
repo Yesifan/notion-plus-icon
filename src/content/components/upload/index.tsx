@@ -1,11 +1,11 @@
-import * as styles from './css';
+import { overflow } from './css';
 
-import Button from '../button';
+import Button, { styles } from '../button';
 
 const App:React.FC<React.HTMLAttributes<HTMLDivElement>> = ({children, style, ...props}) => {
   return (
-    <div style={styles.overflow}>
-      <Button>
+    <div style={overflow}>
+      <Button style={styles.block}>
         Choose
       </Button>
     </div>

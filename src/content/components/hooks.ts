@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import { ICON_STORAGE_KEY } from '@/api/notion/icon';
 

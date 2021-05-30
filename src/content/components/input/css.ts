@@ -25,3 +25,21 @@ export const input:CSSProperties = {
   resize: "none",
   padding: "0px"
 }
+
+export const clear:CSSProperties = {
+  userSelect: "none",
+  transition: "background 20ms ease-in 0s",
+  cursor: "pointer",
+  flexShrink: 0,
+  flexGrow: 0,
+  borderRadius: "20px"
+}
+
+export const svg:CSSProperties = {
+  width: "14px",
+  height: "14px",
+  display: "block",
+  fill: "rgba(55, 53, 47, 0.3)",
+  flexShrink: 0,
+  backfaceVisibility: "hidden"
+}
