@@ -8,6 +8,7 @@ import Hover from '../components/hover';
 import Link from '../components/link';
 import Upload from '../components/upload';
 
+import { getPanelMask } from '@/content/lib/dom';
 import { setPageIcon } from '@/content/lib/notion';
 
 import * as styles from './css';
@@ -30,6 +31,8 @@ const SubTitle:React.FC = ({children}) => {
 const App:React.FC<PanelProps> = ({container}) => {
   const [icons, pageId] = useSelector(({icons, pageId}) => [icons, pageId]);
   const setIcon = useCallback(async (url:string, signedGetUrl?:string)=>{
+    const mask = getPanelMask();
+    if(mask) mask.click();
     return pageId && setPageIcon(pageId, url, signedGetUrl);
   },[])
   const wrap = useMemo(()=>{

@@ -2,6 +2,7 @@ import { delay } from './utils';
 
 const ICON_SELECTOR = '.notion-frame .notion-scroller .notion-record-icon';
 const PANEL_SELECTOR = '.notion-default-overlay-container .notion-media-menu';
+const PANEL_MASK_SELECTOR = '.notion-default-overlay-container div[style*="100vw"]';
 
 export const getIconDom = () => {
   return new Promise<Element>(resolve => {
@@ -38,3 +39,5 @@ export const getIconPanel = () => {
     }else delay(100).then(getIconPanel).then(resolve);
   })
 }
+
+export const getPanelMask = () => <HTMLElement>document.querySelector(PANEL_MASK_SELECTOR);
