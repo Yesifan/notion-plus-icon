@@ -1,12 +1,13 @@
 {
   "name": "notion-plus-icon",
   "version": "1.0.0",
-  "description": "use more icon for notion",
+  "description": "It is convenient to use icons in notion",
   "scripts": {
     "build": "webpack --config config/webpack.config.js",
     "start": "webpack --config config/webpack.config.js --watch"
   },
   "keywords": [
+    "icon",
     "notion"
   ],
   "license": "ISC",
