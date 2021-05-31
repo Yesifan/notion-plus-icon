@@ -1,4 +1,6 @@
-import store, { setPageId, changeTab, TabType } from './store';
+import storage, { getStorage, ICON_STORAGE_KEY } from '@/lib/storage';
+
+import store, { setPageId, setIcons, changeTab, TabType } from './store';
 
 import { getIconDom, getIconPanel } from './lib/dom';
 
@@ -12,7 +14,8 @@ export default class Observer {
   callback?: Function[] = [];
 
   constructor(){
-    store.subscribe(() => this.handleTabChange());
+    this.tabObserver();
+    this.storageObserver();
     this.update();
   }
 
@@ -26,17 +29,41 @@ export default class Observer {
 
   async update(){
     store.dispatch(setPageId())
-    this.setIcon();
+    this.setIconListener();
+  }
+  
+  tabObserver(){
+    store.subscribe(()=>{
+      const previous = this.current;
+      this.current = store.getState().selected;
+      if(previous === this.current) return;
+      const isPlus = this.current === 'plus';
+      this.changeNotionPanel(isPlus);
+      this.changeNotionSearch(isPlus);
+      this.changeNotionUnderline(isPlus, previous, this.current);
+    });
   }
 
-  async setIcon(){
+  async storageObserver(){
+    const urls = await getStorage(ICON_STORAGE_KEY)
+    store.dispatch(setIcons(urls));
+  
+    storage.onChanged.addListener((changes)=>{
+      if(changes[ICON_STORAGE_KEY]){
+        const { newValue } = changes[ICON_STORAGE_KEY];
+        store.dispatch(setIcons(newValue));
+      }
+    })
+  }
+
+  async setIconListener(){
     const icon = await getIconDom();
     if(this.icon === icon) return;
     this.icon = icon;
-    icon.addEventListener('click', () => this.setContainer());
+    icon.addEventListener('click', () => this.setContainerListener());
   }
 
-  async setContainer(){
+  async setContainerListener(){
     store.dispatch(changeTab(0)); // reset selected 0
     const panel = await getIconPanel();
     const { plusTab, tabContainer, panelContainer } = panel;
@@ -49,22 +76,12 @@ export default class Observer {
         const [ emoji, upload, url ] = Array.from(tabContainer.firstChild?.childNodes) as Element[];
         this.tabs = [ emoji, upload, url ];
       }
-      this.addNotionTabEvent();
+      this.setNotionTabListener();
       this.emit();
     }
   }
 
-  handleTabChange(){
-    const previous = this.current;
-    this.current = store.getState().selected;
-    if(previous === this.current) return;
-    const isPlus = this.current === 'plus';
-    this.changeNotionPanel(isPlus);
-    this.changeNotionSearch(isPlus);
-    this.changeNotionUnderline(isPlus, previous, this.current);
-  }
-
-  addNotionTabEvent(){
+  setNotionTabListener(){
     this.tabs?.forEach((tab, index) => {
       tab.addEventListener('click', () => {
         store.dispatch(changeTab(index));
