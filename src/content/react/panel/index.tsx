@@ -10,12 +10,21 @@ import Upload from '../components/upload';
 
 import { setPageIcon } from '@/content/lib/notion';
 
-import * as style from './css';
+import * as styles from './css';
 
 const ROW_SIZE = 12;
 
 export interface PanelProps {
   container:Element
+}
+
+const SubTitle:React.FC = ({children}) => {
+  return (
+    <div style={styles.title}>
+      <div style={styles.ellipsis}>{children}</div>
+      <div style={{marginLeft: "auto"}}></div>
+    </div>
+  )
 }
 
 const App:React.FC<PanelProps> = ({container}) => {
@@ -32,19 +41,20 @@ const App:React.FC<PanelProps> = ({container}) => {
     },[[]])}, [icons]);
 
   return createPortal(
-    <div style={style.columnFlex}>
-      <div style={style.toolRow}>
+    <div style={styles.columnFlex}>
+      <div style={styles.toolRow}>
         <Upload onUpload={setIcon}/>
         <Link onClick={setIcon}/>
       </div>
       <div style={{flexGrow: 1}}>
-        <div style={style.padding}>
-          <div style={style.iconContainer}>
+        <div style={styles.padding}>
+          <SubTitle>Recent</SubTitle>
+          <div style={styles.iconContainer}>
             {wrap.map((row, index) => (
             <div style={{display:'flex'}} key={index}>
               {row.map(url => (
-              <Hover key={url} style={style.icon} onClick={()=>setIcon(url)}>
-                <Icon alt="img-url" aria-label="img-url" style={style.img} src={url}/>
+              <Hover key={url} style={styles.icon} onClick={()=>setIcon(url)}>
+                <Icon alt="img-url" aria-label="img-url" style={styles.img} src={url}/>
               </Hover>))}
             </div>))}
           </div>

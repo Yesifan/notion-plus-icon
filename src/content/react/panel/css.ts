@@ -15,6 +15,26 @@ export const columnFlex:CSSProperties = {
   flexDirection: 'column'
 }
 
+export const title:CSSProperties = {
+  display: "flex",
+  paddingLeft: "14px",
+  paddingRight: "14px",
+  marginTop: "6px",
+  marginBottom: "8px",
+  color: "rgba(55, 53, 47, 0.6)",
+  fontSize: "11px",
+  fontWeight: 500,
+  lineHeight: "120%",
+  userSelect: "none",
+  textTransform: "uppercase"
+}
+
+export const ellipsis:CSSProperties = {
+  whiteSpace: 'nowrap',
+  overflow: 'hidden',
+  textOverflow: 'ellipsis'
+}
+
 export const toolRow:CSSProperties = {
   display: 'flex',
   marginTop: '12px',

@@ -3,7 +3,7 @@ import { setStorage4prev, ICON_STORAGE_KEY } from '@/lib/storage';
 import { getUUID } from '@/content/lib/utils';
 
 import { uploadFile } from '@/api/notion/uoload'
-import { loadCachedPageChunk, setIcon as setIcon4id } from '@/api/notion';
+import { loadCachedPageChunk, setIcon } from '@/api/notion';
 
 import * as Notion from '@/interface/notion';
 
@@ -42,10 +42,10 @@ export async function setPageIcon(pageId:string, url:string, signedGetUrl?:strin
       const { space_id, collection_id } = pageChunk.recordMap.block[pageId].value;
       if(signedGetUrl){
         const fileId = collection_id ? getUUID(url) : undefined;
-        await setIcon4id(url, pageId, space_id, collection_id, fileId);
+        await setIcon(url, pageId, space_id, collection_id, fileId);
         return cacheIconUrl(signedGetUrl);
       }else{
-        await setIcon4id(url, pageId, space_id, collection_id);
+        await setIcon(url, pageId, space_id, collection_id);
         return cacheIconUrl(url);
       }
     }
