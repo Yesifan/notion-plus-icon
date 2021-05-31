@@ -14,7 +14,7 @@ import * as styles from './css';
 
 const ROW_SIZE = 12;
 
-export interface PanelProps {
+export interface PanelProps extends React.HTMLAttributes<HTMLDivElement> {
   container:Element
 }
 

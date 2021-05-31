@@ -13,7 +13,6 @@ const colors = ["rgb(46, 170, 220)", "rgb(6, 156, 205)", "rgb(0, 141, 190)"];
 const App:React.FC<ButtonProps> = ({children, style, className, backgroundColors = colors, ...props}={}) => {
   const { onMouseOver, onMouseOut, onMouseUp, onMouseDown, ..._props } = props;
   const [ state, setState ] = useState<number>(0);
-  console.log(state, backgroundColors);
   const handleInOut = (inOut:-1|1, event?:React.MouseEvent, callback?:Function) => {
     setState(state => state + inOut);
     callback?.(event);

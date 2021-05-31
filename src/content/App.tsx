@@ -4,10 +4,12 @@ import Tab, { TabProps } from './react/tab';
 
 import store from '@/content/store';
 
-const App = (props:TabProps) => (
-  <Provider store={store}>
-    <Tab {...props}/>
-  </Provider>
+const App = (props:TabProps) => {
+  return (
+    <Provider store={store}>
+      <Tab {...props}/>
+    </Provider>
   )
+}
 
 export default App;

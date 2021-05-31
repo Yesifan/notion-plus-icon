@@ -7,10 +7,13 @@ import { getIconDom, getIconPanel } from './lib/dom';
 export default class Observer {
   current?: TabType;
   icon?: Element;
+  iconContainer? :Element;
   tabs?: Element[];
   tabContainer?: Element;
   panelContainer?: Element;
   pluseTabContainer?: Element;
+
+  iconObserver?: MutationObserver
   callback?: Function[] = [];
 
   constructor(){
@@ -29,7 +32,7 @@ export default class Observer {
 
   async update(){
     store.dispatch(setPageId())
-    this.setIconListener();
+    this.setIconContainerListener();
   }
   
   tabObserver(){
@@ -56,11 +59,21 @@ export default class Observer {
     })
   }
 
-  async setIconListener(){
-    const icon = await getIconDom();
+  async setIconContainerListener(){
+    const iconContainer = await getIconDom();
+    if(this.iconContainer === iconContainer) return;
+    this.iconContainer = iconContainer;
+    this.iconObserver?.disconnect();
+    this.setIconListener();
+    this.iconObserver = new MutationObserver(()=>this.setIconListener());
+    this.iconObserver.observe(this.iconContainer, {childList: true});
+  }
+
+  setIconListener(){
+    const icon = <Element>this.iconContainer?.firstChild;
     if(this.icon === icon) return;
     this.icon = icon;
-    icon.addEventListener('click', () => this.setContainerListener());
+    this.icon.addEventListener('click', () => this.setContainerListener());
   }
 
   async setContainerListener(){

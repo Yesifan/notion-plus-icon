@@ -1,6 +1,6 @@
 import { delay } from './utils';
 
-const ICON_SELECTOR = '.notion-frame .notion-scroller .notion-record-icon>div';
+const ICON_SELECTOR = '.notion-frame .notion-scroller .notion-record-icon';
 const PANEL_SELECTOR = '.notion-default-overlay-container .notion-media-menu';
 
 export const getIconDom = () => {
