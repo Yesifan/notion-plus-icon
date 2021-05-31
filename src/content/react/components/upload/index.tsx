@@ -1,8 +1,7 @@
 import Button, { styles } from '../button';
 
-import upload from '@/api/notion/uoload';
-
 import { chooseFile } from '@/content/lib/utils';
+import { upload } from '@/content/lib/notion';
 
 import { overflow } from './css';
 

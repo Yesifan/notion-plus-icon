@@ -4,14 +4,15 @@ import { TypedUseSelectorHook, useSelector as reduxUseSelector, useDispatch as r
 
 import { getUUID } from '@/content/lib/utils';
 
-type TabType = number| 'plus';
+export type TabType = number| 'plus';
 export interface State {
-  prev?: TabType,
+  icons: string[],
   selected: TabType,
-  pageId?: string
+  pageId?: string,
 }
 
 const initialState: Redux.PreloadedState<State> = {
+  icons: [],
   selected: 0,
 }
 
@@ -19,13 +20,15 @@ const slice = createSlice({
   name: 'state',
   initialState,
   reducers: {
+    setIcons:(state, {payload}) => {
+      state.icons = payload;
+    },
     setPageId: (state) => {
       state.pageId = getUUID(location.href);
     },
     changeTab: (state, {payload}:Action<TabType>) => {
-      state.prev = state.selected;
       state.selected = payload
-    }
+    },
   },
 })
 
@@ -36,7 +39,7 @@ const store = configureStore<State>({
 
 export default store;
 
-export const { setPageId, changeTab } = slice.actions;
+export const { setIcons, setPageId, changeTab } = slice.actions;
 export type AppDispatch = typeof store.dispatch;
 
 export const useDispatch = () => reduxUseDispatch<AppDispatch>();

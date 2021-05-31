@@ -1,8 +1,9 @@
-import store, { setPageId, changeTab } from './store';
+import store, { setPageId, changeTab, TabType } from './store';
 
 import { getIconDom, getIconPanel } from './lib/dom';
 
 export default class Observer {
+  current?: TabType;
   icon?: Element;
   tabs?: Element[];
   tabContainer?: Element;
@@ -11,7 +12,7 @@ export default class Observer {
   callback?: Function[] = [];
 
   constructor(){
-    store.subscribe(() => this.addReduxEvent());
+    store.subscribe(() => this.handleTabChange());
     this.update();
   }
 
@@ -53,13 +54,14 @@ export default class Observer {
     }
   }
 
-  addReduxEvent(){
-    const { prev, selected } = store.getState();
-    if(prev === selected) return;
-    const isPlus = selected === 'plus';
+  handleTabChange(){
+    const previous = this.current;
+    this.current = store.getState().selected;
+    if(previous === this.current) return;
+    const isPlus = this.current === 'plus';
     this.changeNotionPanel(isPlus);
     this.changeNotionSearch(isPlus);
-    this.changeNotionUnderline(isPlus);
+    this.changeNotionUnderline(isPlus, previous, this.current);
   }
 
   addNotionTabEvent(){
@@ -96,15 +98,14 @@ export default class Observer {
     }
   }
 
-  changeNotionUnderline(isPlus:boolean){
+  changeNotionUnderline(isPlus:boolean, prev?:TabType, current?:TabType){
     if(this.tabs){
-      const { prev, selected } = store.getState();
       if(isPlus && typeof prev === 'number'){
         const tab = this.tabs[prev]
         const underline = <HTMLElement>tab.childNodes[1];
         underline && (underline.style.display = "none");
-      }else if(typeof selected === 'number'){
-        const tab = this.tabs[selected]
+      }else if(typeof current === 'number'){
+        const tab = this.tabs[current]
         const underline = <HTMLElement>tab.childNodes[1];
         underline && (underline.style.display = "block");
       }

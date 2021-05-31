@@ -2,7 +2,7 @@ import store from '@/content/store';
 
 import { fetcher } from '../request';
 
-import { loadCachedPageChunk, setIcon } from './index';
+import { loadCachedPageChunk } from './index';
 
 import * as Notion from '@/interface/notion';
 
@@ -34,17 +34,3 @@ export const uploadFile = async (pageId:string, spaceId:string, file:File) => {
   });
   return {url, signedGetUrl};
 }
-
-const upload = async (file:File):Promise<Omit<Notion.UploadFileUrl,'signedPutUrl'>|void> => {
-  const pageId = store.getState().pageId;
-  if(pageId){
-    const pageChunk = await loadCachedPageChunk(pageId);
-    const blockInfo = pageChunk?.recordMap.block[pageId];
-    if(blockInfo) {
-      const { space_id } = pageChunk.recordMap.block[pageId].value;
-      return uploadFile(pageId, space_id, file);
-    }
-  }
-}
-
-export default upload;

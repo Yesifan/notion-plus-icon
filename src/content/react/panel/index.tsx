@@ -1,14 +1,14 @@
 import { useMemo } from 'react';
 import { createPortal } from 'react-dom';
 
-import { useGetStorage } from '../hooks';
+import { useSelector } from '@/content/store';
 
 import Icon from '../components/icon';
 import Hover from '../components/hover';
 import Link from '../components/link';
 import Upload from '../components/upload';
 
-import setIcon from '@/api/notion/icon'
+import { setIcon } from '@/content/lib/notion';
 
 import * as style from './css';
 
@@ -19,7 +19,7 @@ export interface PanelProps {
 }
 
 const App:React.FC<PanelProps> = ({container}) => {
-  const urls = useGetStorage();
+  const urls = useSelector(state => state.icons);
 
   const wrap = useMemo(()=>{
     return urls.reduce<string[][]>((acc, url)=>{

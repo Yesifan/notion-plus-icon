@@ -1,4 +1,5 @@
-import { removeIconUrl } from '@/api/notion/icon'
+import { removeIconUrl } from '@/content/lib/notion';
+
 const App:React.FC<React.ImgHTMLAttributes<HTMLImageElement>> = props => {
   const handleError = () => {
     props.src && removeIconUrl(props.src)
