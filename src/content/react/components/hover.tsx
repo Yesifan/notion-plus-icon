@@ -14,10 +14,12 @@ const App:React.FC<React.HTMLAttributes<HTMLDivElement>> = ({children, style, ..
   }
 
   return (
-    <div {...props}
-    style={{...style, ...isHover(hover)}}
-    onMouseOver={()=>handleHover(true)}
-    onMouseOut={()=>handleHover(false)}>
+    <div role="button" tabIndex={-1}
+      className="notion-focusable"
+      style={{...style, ...isHover(hover)}}
+      onMouseOver={()=>handleHover(true)}
+      onMouseOut={()=>handleHover(false)}
+      {...props}>
       {children}
     </div>
   )

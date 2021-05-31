@@ -10,6 +10,7 @@ export interface LinkProps extends Omit<React.HTMLAttributes<HTMLDivElement>,'on
 
 const App:React.FC<LinkProps> = ({style, onClick, ...props}) => {
   const [value, setValue] = useState<string>('');
+
   return (
     <div style={{...styles.wrap, ...style}} {...props}>
       <Input

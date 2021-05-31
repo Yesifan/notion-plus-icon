@@ -1,15 +1,15 @@
 import { setStorage4prev, ICON_STORAGE_KEY } from '@/lib/storage';
 
-import store from '@/content/store';
-
 import { getUUID } from '@/content/lib/utils';
 
-import { loadCachedPageChunk, setIcon as setIcon4id } from '@/api/notion';
 import { uploadFile } from '@/api/notion/uoload'
+import { loadCachedPageChunk, setIcon as setIcon4id } from '@/api/notion';
 
 import * as Notion from '@/interface/notion';
 
 const ICON_URL_LIMIT = 60;
+
+const chunkCache = new Map();
 
 export function cacheIconUrl(url:string){
   return setStorage4prev<string[]>(ICON_STORAGE_KEY, urls => {
@@ -27,17 +27,23 @@ export function removeIconUrl(url:string){
   });
 }
 
-export async function setIcon(url:string, signedGettUrl?:string){
-  const pageId = store.getState().pageId;
+export async function getChunkCache(pageId:string){
+  if(chunkCache.has(pageId)) return chunkCache.get(pageId);
+  const pageChunk = await loadCachedPageChunk(pageId);
+  chunkCache.set(pageId, pageChunk);
+  return pageChunk;
+}
+
+export async function setPageIcon(pageId:string, url:string, signedGetUrl?:string){
   if(pageId){
-    const pageChunk = await loadCachedPageChunk(pageId);
+    const pageChunk = await getChunkCache(pageId);
     const blockInfo = pageChunk?.recordMap.block[pageId];
     if(blockInfo) {
       const { space_id, collection_id } = pageChunk.recordMap.block[pageId].value;
-      if(signedGettUrl){
+      if(signedGetUrl){
         const fileId = collection_id ? getUUID(url) : undefined;
         await setIcon4id(url, pageId, space_id, collection_id, fileId);
-        return cacheIconUrl(signedGettUrl);
+        return cacheIconUrl(signedGetUrl);
       }else{
         await setIcon4id(url, pageId, space_id, collection_id);
         return cacheIconUrl(url);
@@ -47,14 +53,11 @@ export async function setIcon(url:string, signedGettUrl?:string){
   return undefined;
 }
 
-export const upload = async (file:File):Promise<Omit<Notion.UploadFileUrl,'signedPutUrl'>|void> => {
-  const pageId = store.getState().pageId;
-  if(pageId){
-    const pageChunk = await loadCachedPageChunk(pageId);
-    const blockInfo = pageChunk?.recordMap.block[pageId];
-    if(blockInfo) {
-      const { space_id } = pageChunk.recordMap.block[pageId].value;
-      return uploadFile(pageId, space_id, file);
-    }
+export const upload = async (pageId:string, file:File):Promise<Omit<Notion.UploadFileUrl,'signedPutUrl'>|void> => {
+  const pageChunk = await getChunkCache(pageId);
+  const blockInfo = pageChunk?.recordMap.block[pageId];
+  if(blockInfo) {
+    const { space_id } = pageChunk.recordMap.block[pageId].value;
+    return uploadFile(pageId, space_id, file);
   }
 }

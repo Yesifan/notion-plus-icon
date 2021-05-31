@@ -1,4 +1,4 @@
-import { useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 
 import { useSelector } from '@/content/store';
@@ -8,7 +8,7 @@ import Hover from '../components/hover';
 import Link from '../components/link';
 import Upload from '../components/upload';
 
-import { setIcon } from '@/content/lib/notion';
+import { setPageIcon } from '@/content/lib/notion';
 
 import * as style from './css';
 
@@ -19,15 +19,17 @@ export interface PanelProps {
 }
 
 const App:React.FC<PanelProps> = ({container}) => {
-  const urls = useSelector(state => state.icons);
-
+  const [icons, pageId] = useSelector(({icons, pageId}) => [icons, pageId]);
+  const setIcon = useCallback(async (url:string, signedGetUrl?:string)=>{
+    return pageId && setPageIcon(pageId, url, signedGetUrl);
+  },[])
   const wrap = useMemo(()=>{
-    return urls.reduce<string[][]>((acc, url)=>{
+    return icons.reduce<string[][]>((acc, url)=>{
       const current = acc[acc.length-1];
       if(current.length >= ROW_SIZE) acc.push([url]);
       else current.push(url);
       return acc;
-    },[[]])}, [urls]);
+    },[[]])}, [icons]);
 
   return createPortal(
     <div style={style.columnFlex}>
@@ -41,7 +43,7 @@ const App:React.FC<PanelProps> = ({container}) => {
             {wrap.map((row, index) => (
             <div style={{display:'flex'}} key={index}>
               {row.map(url => (
-              <Hover key={url} className="notion-focusable" role="button" tabIndex={-1} style={style.icon} onClick={()=>setIcon(url)}>
+              <Hover key={url} style={style.icon} onClick={()=>setIcon(url)}>
                 <Icon alt="img-url" aria-label="img-url" style={style.img} src={url}/>
               </Hover>))}
             </div>))}

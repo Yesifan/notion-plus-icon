@@ -1,20 +1,26 @@
+import { useSelector } from '@/content/store';
+
 import Button, { styles } from '../button';
 
 import { chooseFile } from '@/content/lib/utils';
 import { upload } from '@/content/lib/notion';
 
 import { overflow } from './css';
+import { useCallback } from 'react';
 
 export interface UploadProps extends React.HTMLAttributes<HTMLDivElement> {
   onUpload?: (url:string, awsUrl:string) => void
 }
 
 const App:React.FC<UploadProps> = ({children, style, onUpload, ...props}) => {
-  const handleClick = async () => {
-    const file = (await chooseFile()) as File;
-    const data = await upload(file);
-    data && onUpload?.(data.url, data.signedGetUrl);
-  }
+  const pageId = useSelector(({pageId}) => pageId);
+  const handleClick = useCallback(async () => {
+    if(pageId){
+      const file = (await chooseFile()) as File;
+      const data = await upload(pageId, file);
+      data && onUpload?.(data.url, data.signedGetUrl);
+    }
+  },[pageId])
 
   return (
     <div style={overflow}>

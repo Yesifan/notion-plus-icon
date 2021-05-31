@@ -21,7 +21,7 @@ const App:React.FC<TabProps> = props => {
 
   return (
     <div style={container}>
-      <Hover className="notion-focusable" role="button" onClick={handleClick} tabIndex={-1} style={tab}>
+      <Hover onClick={handleClick} style={tab}>
         Plus
       </Hover>
       {selected === "plus" && <div style={underline}/>}
