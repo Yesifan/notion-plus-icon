@@ -10,6 +10,5 @@ tabs.onUpdated.addListener((tabId, changeInfo, tab) => {
   if(isUrlChange && isNotion){
     prevUrl4id.set(tabId, <string>changeInfo.url);
     tabs.sendMessage(tabId, 'urlchagne');
-    console.log('urlchange')
   }
 });

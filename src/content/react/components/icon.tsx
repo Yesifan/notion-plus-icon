@@ -1,10 +1,12 @@
 import { removeIconUrl } from '@/content/lib/notion';
 
 const App:React.FC<React.ImgHTMLAttributes<HTMLImageElement>> = props => {
-  const handleError = () => {
-    props.src && removeIconUrl(props.src);
+  const handleError = (src?:string) => {
+    if(src){
+      props.src && removeIconUrl(src);
+    }
   }
-  return <img onError={handleError} {...props}/>;
+  return <img onError={() =>handleError(props.src)} {...props}/>;
 }
 
 export default App;

@@ -26,14 +26,16 @@ const SubTitle:React.FC = ({children}) => {
 const App:React.FC = () => {
   const dispatch = useDispatch();
   const [tab, icons, pageId, container] = useSelector(state => [state.current, state.icons, state.pageId, state.panelContainer]);
-  const setIcon = useCallback(async (url:string, signedGetUrl?:string)=>{
+  const setIcon = useCallback(async (url:string, signedGetUrl:string, isUpload = false)=>{
     dispatch('HIDE_NOTION_ICON_PANEL')
-    return pageId && setPageIcon(pageId, url, signedGetUrl);
+    return pageId && setPageIcon(pageId, url, signedGetUrl, isUpload);
   },[])
   const wrap = useMemo(()=>{
-    const iconreduce = [...(icons.default||[]),...(icons[pageId!]||[])];
-    return iconreduce
-    .sort((a, b)=> a.timestamp-b.timestamp)
+    const linkIcons = icons.default||[];
+    const pageIcons = icons[pageId!]||[];
+    
+    return [...linkIcons, ...pageIcons]
+    .sort((a, b)=> b.timestamp-a.timestamp)
     .reduce<IconProps[][]>((acc, url)=>{
       const current = acc[acc.length-1];
       if(current.length >= ROW_SIZE) acc.push([url]);
@@ -46,8 +48,8 @@ const App:React.FC = () => {
   return createPortal(
     <div style={styles.columnFlex}>
       <div style={styles.toolRow}>
-        <Upload onUpload={setIcon}/>
-        <Link onClick={setIcon}/>
+        <Upload onUpload={(url, src)=>setIcon(url, src, true)}/>
+        <Link onClick={(url)=>setIcon(url, url)}/>
       </div>
       <div style={{flexGrow: 1}}>
         <div style={styles.padding}>
@@ -56,7 +58,7 @@ const App:React.FC = () => {
             {wrap.map((row, index) => (
             <div style={{display:'flex'}} key={index}>
               {row.map(({src, url}) => (
-              <Hover key={url} style={styles.icon} onClick={()=>setIcon(url)}>
+              <Hover key={url} style={styles.icon} onClick={()=>setIcon(url, src)}>
                 <Icon alt="img-url" aria-label="img-url" style={styles.img} src={src}/>
               </Hover>))}
             </div>))}

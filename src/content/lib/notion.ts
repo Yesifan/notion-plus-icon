@@ -8,6 +8,7 @@ import { loadCachedPageChunk, setIcon } from '@/api/notion';
 import * as Notion from '@/interface/notion';
 
 const chunkCache = new Map();
+const AWS_NOTION_STATIC_URL = 's3-us-west-2.amazonaws.com/secure.notion-static.com'
 export interface Icon {
   src:string,
   url:string,
@@ -23,8 +24,8 @@ export async function cacheIconUrl(src:string, url:string, id:string = 'default'
   const icons = await getStorage<StorageIcons>(ICON_STORAGE_KEY);
   if(icons){
     if(icons[id]){
-      const idIcons = icons[id];
-      const newIdIcons = [{src, url, timestamp}, ...idIcons.filter(item => url!==item.url)];
+      const filters = icons[id].filter(item => url!==item.url);
+      const newIdIcons = [{src, url, timestamp}, ...filters];
       icons[id] = newIdIcons
     }else{
       icons[id] = [{src, url, timestamp}]
@@ -51,20 +52,20 @@ export async function getChunkCache(pageId:string){
   return pageChunk;
 }
 
-export async function setPageIcon(pageId:string, url:string, signedGetUrl?:string){
+export async function setPageIcon(pageId:string, url:string, signedGetUrl:string, isUpload?:boolean){
   if(pageId){
     const pageChunk = await getChunkCache(pageId);
     const blockInfo = pageChunk?.recordMap.block[pageId];
     if(blockInfo) {
       const { space_id, collection_id } = pageChunk.recordMap.block[pageId].value;
-      if(signedGetUrl){
+      const cacheId = url.indexOf(AWS_NOTION_STATIC_URL)>= 0 ? pageId : 'default';
+      if(isUpload){
         const fileId = collection_id ? getUUID(url) : undefined;
         await setIcon(url, pageId, space_id, collection_id, fileId);
-        return cacheIconUrl(signedGetUrl, url, pageId);
       }else{
         await setIcon(url, pageId, space_id, collection_id);
-        return cacheIconUrl(url, url);
       }
+      return cacheIconUrl(signedGetUrl, url, cacheId);
     }
   }
   return undefined;
