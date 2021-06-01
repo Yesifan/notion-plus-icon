@@ -2,6 +2,7 @@ import storage, { getStorage, ICON_STORAGE_KEY } from '@/lib/storage';
 
 import { StorageIcons } from '../lib/notion';
 import { getIconDom, getIconPanel, getPanelMask } from '../lib/dom';
+import { delay } from '../lib/utils';
 
 export * from './hooks';
 
@@ -54,10 +55,13 @@ export default class Observer {
         break;
       case 'PAGE_CHANGE':
         this.pageId = payload;
+        await delay(100);
+        this.dispatch("ICON_CONTAINER_CHANGE");
+        break;
       case 'ICON_CONTAINER_CHANGE':
-        const element = await getIconDom();
-        if(element === this.iconContainer) return;
-        this.iconContainer = element;
+        const iconContainer = await getIconDom();
+        if(iconContainer === this.iconContainer) return;
+        this.iconContainer = iconContainer;
         this.iconObserver?.disconnect();
         this.iconObserver = new MutationObserver(()=>this.dispatch("ICON_CHANGE"));
         this.iconObserver.observe(this.iconContainer, {childList: true});
