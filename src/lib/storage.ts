@@ -19,13 +19,4 @@ export function setStorage(items:Object) {
   return setPromise;
 }
 
-interface Translation<T> {
-  (icons:T): T
-}
-export async function setStorage4prev<T>(key:string, getNewValue:Translation<T>) {
-  const value = await getStorage<T>(key);
-  const newValue = getNewValue(value);
-  return setStorage({[key]: newValue});
-}
-
 export default storage;

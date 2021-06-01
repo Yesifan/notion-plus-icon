@@ -8,7 +8,7 @@ export const getIconDom = () => {
   return new Promise<Element>(resolve => {
     const dom = document.querySelector(ICON_SELECTOR);
     if(dom) resolve(dom);
-    else delay(1000).then(getIconDom).then(resolve);
+    else delay(100).then(getIconDom).then(resolve);
   })
 }
 

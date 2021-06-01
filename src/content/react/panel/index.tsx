@@ -31,13 +31,16 @@ const App:React.FC = () => {
     return pageId && setPageIcon(pageId, url, signedGetUrl);
   },[])
   const wrap = useMemo(()=>{
-    return icons.reduce<IconProps[][]>((acc, url)=>{
+    const iconreduce = [...(icons.default||[]),...(icons[pageId!]||[])];
+    return iconreduce
+    .sort((a, b)=> a.timestamp-b.timestamp)
+    .reduce<IconProps[][]>((acc, url)=>{
       const current = acc[acc.length-1];
       if(current.length >= ROW_SIZE) acc.push([url]);
       else current.push(url);
       return acc;
     },[[]])
-}, [icons]);
+  }, [icons, pageId]);
 
   if(!container||tab!=='plus') return null;
   return createPortal(

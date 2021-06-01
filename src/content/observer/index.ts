@@ -1,6 +1,6 @@
 import storage, { getStorage, ICON_STORAGE_KEY } from '@/lib/storage';
 
-import { Icon } from '../lib/notion';
+import { StorageIcons } from '../lib/notion';
 import { getIconDom, getIconPanel, getPanelMask } from '../lib/dom';
 
 export * from './hooks';
@@ -15,7 +15,7 @@ export type TabType = number| 'plus';
 
 export default class Observer {
   pageId?:string;
-  icons: Icon[] = [];
+  icons: StorageIcons = { default:[] };
 
   current:TabType = 0;
   private previous?: TabType;
@@ -50,7 +50,7 @@ export default class Observer {
         this.tabs && changeNotionUnderline(this.tabs, isPlus, this.previous, this.current);
         break;
       case 'STORAGE_ICONS_CHANGE':
-        this.icons = payload||[];
+        this.icons = payload||{ default:[] };
         break;
       case 'PAGE_CHANGE':
         this.pageId = payload;

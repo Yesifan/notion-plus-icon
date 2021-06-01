@@ -1,4 +1,4 @@
-import { setStorage4prev, ICON_STORAGE_KEY } from '@/lib/storage';
+import { getStorage, setStorage, ICON_STORAGE_KEY } from '@/lib/storage';
 
 import { getUUID } from '@/content/lib/utils';
 
@@ -7,28 +7,41 @@ import { loadCachedPageChunk, setIcon } from '@/api/notion';
 
 import * as Notion from '@/interface/notion';
 
-const ICON_URL_LIMIT = 60;
-
 const chunkCache = new Map();
 export interface Icon {
   src:string,
   url:string,
+  timestamp: number
+}
+export interface StorageIcons {
+  default:Icon[]
+  [id:string]:Icon[]
 }
 
-export function cacheIconUrl(src:string, url:string){
-  return setStorage4prev<Icon[]>(ICON_STORAGE_KEY, icons => {
-    if(icons){
-      const newUrls = [{src, url}, ...icons.filter(item => url!==item.url)];
-      return newUrls.slice(0, ICON_URL_LIMIT);
+export async function cacheIconUrl(src:string, url:string, id:string = 'default'){
+  const timestamp = new Date().valueOf();
+  const icons = await getStorage<StorageIcons>(ICON_STORAGE_KEY);
+  if(icons){
+    if(icons[id]){
+      const idIcons = icons[id];
+      const newIdIcons = [{src, url, timestamp}, ...idIcons.filter(item => url!==item.url)];
+      icons[id] = newIdIcons
+    }else{
+      icons[id] = [{src, url, timestamp}]
     }
-    return [{src, url}]
-  })
+    setStorage({[ICON_STORAGE_KEY]: icons})
+  }else setStorage({[ICON_STORAGE_KEY]: {[id]:[{src, url, timestamp}]}});
 }
 
-export function removeIconUrl(src:string){
-  return setStorage4prev<Icon[]>(ICON_STORAGE_KEY, icons => {
-    return icons ? icons.filter(item => item.src !== src) : [];
-  });
+export async function removeIconUrl(src:string){
+  const icons = await getStorage<StorageIcons>(ICON_STORAGE_KEY);
+  if(icons){
+    const newIcons = Object.entries(icons).reduce<StorageIcons>((acc, [key, value])=>{
+      acc[key] = value ? value.filter(item => item.src!==src) : [ ]
+      return acc;
+    },{default:[]});
+    setStorage({[ICON_STORAGE_KEY]: newIcons})
+  }else setStorage({[ICON_STORAGE_KEY]: {}})
 }
 
 export async function getChunkCache(pageId:string){
@@ -47,7 +60,7 @@ export async function setPageIcon(pageId:string, url:string, signedGetUrl?:strin
       if(signedGetUrl){
         const fileId = collection_id ? getUUID(url) : undefined;
         await setIcon(url, pageId, space_id, collection_id, fileId);
-        return cacheIconUrl(signedGetUrl, url);
+        return cacheIconUrl(signedGetUrl, url, pageId);
       }else{
         await setIcon(url, pageId, space_id, collection_id);
         return cacheIconUrl(url, url);
