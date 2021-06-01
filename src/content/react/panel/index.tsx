@@ -1,7 +1,7 @@
 import { useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 
-import { useSelector } from '@/content/store';
+import { useSelector } from '@/content/observer';
 
 import Icon from '../components/icon';
 import Hover from '../components/hover';
@@ -16,7 +16,7 @@ import * as styles from './css';
 const ROW_SIZE = 12;
 
 export interface PanelProps extends React.HTMLAttributes<HTMLDivElement> {
-  container:Element
+  container?:Element
 }
 
 const SubTitle:React.FC = ({children}) => {
@@ -42,7 +42,7 @@ const App:React.FC<PanelProps> = ({container}) => {
       else current.push(url);
       return acc;
     },[[]])}, [icons]);
-
+  if(!container) return null;
   return createPortal(
     <div style={styles.columnFlex}>
       <div style={styles.toolRow}>

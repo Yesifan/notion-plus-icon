@@ -1,7 +1,6 @@
 const { tabs, webRequest } = chrome;
 
 const NOTION_URL = 'https://www.notion.so';
-const SAVE_TRANSACTIONS_URL = `${NOTION_URL}/api/v3/saveTransactions`;
 
 const prevUrl4id = new Map<number, string>()
 

@@ -1,8 +1,4 @@
-import store from '@/content/store';
-
 import { fetcher } from '../request';
-
-import { loadCachedPageChunk } from './index';
 
 import * as Notion from '@/interface/notion';
 

@@ -1,4 +1,4 @@
-import { useSelector } from '@/content/store';
+import { useSelector } from '@/content/observer';
 
 import Button, { styles } from '../button';
 

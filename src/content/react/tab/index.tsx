@@ -1,32 +1,28 @@
-import { useDispatch, useSelector, changeTab } from '@/content/store';
+import { createPortal } from 'react-dom';
+
+import { useSelector, useDispatch } from '@/content/observer'
 
 import Hover from '../components/hover';
-import Panel, { PanelProps } from '../panel';
+import Panel from '../panel';
 
-import { container, tab, underline } from './css';
+import { container as contanerStyle, tab as tabStyle, underline } from './css';
 
-export interface TabProps extends Omit<PanelProps,'container'> {
-  panelContainer: Element
-}
-
-const App:React.FC<TabProps> = props => {
-  const { panelContainer, ..._props } = props;
-
-  const selected = useSelector(state => state.selected);
+const App:React.FC = () => {
   const dispatch = useDispatch();
-
+  const [ tab, tabContainer, panelContainer ] = useSelector(state => [state.current, state.tab, state.panelContainer]);
   const handleClick = () => {
-    dispatch(changeTab('plus'));
+    dispatch('TAB_CHANGE', 'plus');
   }
-
-  return (
-    <div style={container}>
-      <Hover onClick={handleClick} style={tab}>
+  if(!tabContainer) return null;
+  return createPortal(
+    <div style={contanerStyle}>
+      <Hover onClick={handleClick} style={tabStyle}>
         Plus
       </Hover>
-      {selected === "plus" && <div style={underline}/>}
-      {selected === "plus" && <Panel container={panelContainer} {..._props}/>}
-    </div>
+      {tab === "plus" && <div style={underline}/>}
+      {tab === "plus" && <Panel container={panelContainer}/>}
+    </div>,
+    tabContainer
   )
 }
 
