@@ -27,11 +27,11 @@ export const useSelector:ObserverSelectorHook = (selector) => {
       const newState = selector(observer);
       if(newState !== state) setState(newState);
     })
-  }, [])
+  }, [observer])
   return state;
 }
 
 export const useDispatch = () => {
   const observer = useObserverContext();
-  return (type:string, payload:any) => observer.dispatch(type, payload)
+  return (type:string, payload?:any) => observer.dispatch(type, payload)
 }

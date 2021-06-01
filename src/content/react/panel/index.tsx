@@ -1,23 +1,18 @@
 import { useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 
-import { useSelector } from '@/content/observer';
+import { useSelector, useDispatch } from '@/content/observer';
 
 import Icon from '../components/icon';
 import Hover from '../components/hover';
 import Link from '../components/link';
 import Upload from '../components/upload';
 
-import { getPanelMask } from '@/content/lib/dom';
-import { setPageIcon } from '@/content/lib/notion';
+import { setPageIcon, Icon as IconProps } from '@/content/lib/notion';
 
 import * as styles from './css';
 
 const ROW_SIZE = 12;
-
-export interface PanelProps extends React.HTMLAttributes<HTMLDivElement> {
-  container?:Element
-}
 
 const SubTitle:React.FC = ({children}) => {
   return (
@@ -28,21 +23,23 @@ const SubTitle:React.FC = ({children}) => {
   )
 }
 
-const App:React.FC<PanelProps> = ({container}) => {
-  const [icons, pageId] = useSelector(({icons, pageId}) => [icons, pageId]);
+const App:React.FC = () => {
+  const dispatch = useDispatch();
+  const [tab, icons, pageId, container] = useSelector(state => [state.current, state.icons, state.pageId, state.panelContainer]);
   const setIcon = useCallback(async (url:string, signedGetUrl?:string)=>{
-    const mask = getPanelMask();
-    if(mask) mask.click();
+    dispatch('HIDE_NOTION_ICON_PANEL')
     return pageId && setPageIcon(pageId, url, signedGetUrl);
   },[])
   const wrap = useMemo(()=>{
-    return icons.reduce<string[][]>((acc, url)=>{
+    return icons.reduce<IconProps[][]>((acc, url)=>{
       const current = acc[acc.length-1];
       if(current.length >= ROW_SIZE) acc.push([url]);
       else current.push(url);
       return acc;
-    },[[]])}, [icons]);
-  if(!container) return null;
+    },[[]])
+}, [icons]);
+
+  if(!container||tab!=='plus') return null;
   return createPortal(
     <div style={styles.columnFlex}>
       <div style={styles.toolRow}>
@@ -55,9 +52,9 @@ const App:React.FC<PanelProps> = ({container}) => {
           <div style={styles.iconContainer}>
             {wrap.map((row, index) => (
             <div style={{display:'flex'}} key={index}>
-              {row.map(url => (
+              {row.map(({src, url}) => (
               <Hover key={url} style={styles.icon} onClick={()=>setIcon(url)}>
-                <Icon alt="img-url" aria-label="img-url" style={styles.img} src={url}/>
+                <Icon alt="img-url" aria-label="img-url" style={styles.img} src={src}/>
               </Hover>))}
             </div>))}
           </div>

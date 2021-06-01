@@ -1,6 +1,7 @@
 import storage, { getStorage, ICON_STORAGE_KEY } from '@/lib/storage';
 
-import { getIconDom, getIconPanel } from '../lib/dom';
+import { Icon } from '../lib/notion';
+import { getIconDom, getIconPanel, getPanelMask } from '../lib/dom';
 
 export * from './hooks';
 
@@ -14,10 +15,12 @@ export type TabType = number| 'plus';
 
 export default class Observer {
   pageId?:string;
-  icons: string[] = [];
+  icons: Icon[] = [];
 
   current:TabType = 0;
   private previous?: TabType;
+
+  mask?: HTMLElement;
 
   icon?: Element;
   iconContainer? :Element;
@@ -47,7 +50,7 @@ export default class Observer {
         this.tabs && changeNotionUnderline(this.tabs, isPlus, this.previous, this.current);
         break;
       case 'STORAGE_ICONS_CHANGE':
-        this.icons = payload;
+        this.icons = payload||[];
         break;
       case 'PAGE_CHANGE':
         this.pageId = payload;
@@ -64,9 +67,13 @@ export default class Observer {
         this.icon = icon;
         this.icon.addEventListener('click', () => this.dispatch("SHOW_NOTION_ICON_PANEL"));
         break;
+      case 'HIDE_NOTION_ICON_PANEL':
+        this.mask?.click();
+        break;
       case 'SHOW_NOTION_ICON_PANEL':
         this.dispatch('TAB_CHANGE', 0);
         const { tab, tabs, tabsBar, panelContainer } = await getIconPanel();
+        this.mask = getPanelMask();
         if(this.panelContainer === panelContainer) return;
         this.tab = tab;
         this.tabs = tabs;

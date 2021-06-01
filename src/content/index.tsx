@@ -3,30 +3,30 @@ import { render } from 'react-dom';
 import Observer, { Provider } from './observer';
 
 import Tab from './react/tab';
+import Panel from './react/panel';
 
 import { getUUID } from './lib/utils';
-import { useEffect } from 'react';
 
 const { runtime } = chrome;
 
-const pageId = (getUUID(location.href) as string);
+const pageId = getUUID(location.href);
 const observer = new Observer(pageId);
 
-const changeId = () => {
-  const pageId = (getUUID(location.href) as string);
+runtime.onMessage.addListener(()=>{
+  const pageId = getUUID(location.href);
   observer.dispatch("PAGE_CHANGE", pageId);
-}
+});
 
 const App = () => {
-  useEffect(()=>{
-    runtime.onMessage.addListener(changeId);
-    return () => runtime.onMessage.removeListener(changeId);
-  }, [])
   return (
     <Provider observer={observer}>
       <Tab/>
+      <Panel/>
     </Provider>
   )
 }
 
-render(<App/>, document.createElement('div'));
+const container = document.createElement('div');
+document.body.appendChild(container);
+
+render(<App/>, container);

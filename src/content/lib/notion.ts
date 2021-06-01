@@ -10,20 +10,24 @@ import * as Notion from '@/interface/notion';
 const ICON_URL_LIMIT = 60;
 
 const chunkCache = new Map();
+export interface Icon {
+  src:string,
+  url:string,
+}
 
-export function cacheIconUrl(url:string){
-  return setStorage4prev<string[]>(ICON_STORAGE_KEY, urls => {
-    if(urls){
-      const newUrls = [url, ...urls.filter(item => item!==url)];
+export function cacheIconUrl(src:string, url:string){
+  return setStorage4prev<Icon[]>(ICON_STORAGE_KEY, icons => {
+    if(icons){
+      const newUrls = [{src, url}, ...icons.filter(item => url!==item.url)];
       return newUrls.slice(0, ICON_URL_LIMIT);
     }
-    return [url]
+    return [{src, url}]
   })
 }
 
-export function removeIconUrl(url:string){
-  return setStorage4prev<string[]>(ICON_STORAGE_KEY, urls => {
-    return urls ? urls.filter(_url => _url !== url) : [];
+export function removeIconUrl(src:string){
+  return setStorage4prev<Icon[]>(ICON_STORAGE_KEY, icons => {
+    return icons ? icons.filter(item => item.src !== src) : [];
   });
 }
 
@@ -43,10 +47,10 @@ export async function setPageIcon(pageId:string, url:string, signedGetUrl?:strin
       if(signedGetUrl){
         const fileId = collection_id ? getUUID(url) : undefined;
         await setIcon(url, pageId, space_id, collection_id, fileId);
-        return cacheIconUrl(signedGetUrl);
+        return cacheIconUrl(signedGetUrl, url);
       }else{
         await setIcon(url, pageId, space_id, collection_id);
-        return cacheIconUrl(url);
+        return cacheIconUrl(url, url);
       }
     }
   }

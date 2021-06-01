@@ -15,7 +15,7 @@ export function getUUID(string:string, uuid=true){
     return uuid ? match2[1] : uuidToId(match2[1]);
   }
 
-  return undefined
+  return ''
 }
 
 export const delay = (time:number) => {
