@@ -29,7 +29,7 @@ const App:React.FC = () => {
   const setIcon = useCallback(async (url:string, signedGetUrl:string, isUpload = false)=>{
     dispatch('HIDE_NOTION_ICON_PANEL')
     return pageId && setPageIcon(pageId, url, signedGetUrl, isUpload);
-  },[])
+  },[pageId])
   const wrap = useMemo(()=>{
     const linkIcons = icons.default||[];
     const pageIcons = icons[pageId!]||[];

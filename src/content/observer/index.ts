@@ -62,7 +62,6 @@ export default class Observer {
         break;
       case 'ICON_CONTAINER_CHANGE':
         const iconContainer = await getIconDom();
-        console.log(iconContainer)
         if(iconContainer === this.iconContainer) return;
         this.iconContainer = iconContainer;
         this.iconObserver?.disconnect();
