@@ -1,6 +1,6 @@
 import { getStorage, setStorage, ICON_STORAGE_KEY } from '@/lib/storage';
 
-import { getUUID } from '@/content/lib/utils';
+import { getUUID } from '@/lib/utils';
 
 import { uploadFile } from '@/api/notion/uoload'
 import { loadCachedPageChunk, setIcon } from '@/api/notion';

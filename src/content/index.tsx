@@ -5,15 +5,15 @@ import Observer, { Provider } from './observer';
 import Tab from './react/tab';
 import Panel from './react/panel';
 
-import { getUUID } from './lib/utils';
+import { getCurrentPageId } from './lib/utils';
 
 const { runtime } = chrome;
 
-const pageId = getUUID(location.href);
+const pageId = getCurrentPageId();
 const observer = new Observer(pageId);
 
 runtime.onMessage.addListener(()=>{
-  const pageId = getUUID(location.href);
+  const pageId = getCurrentPageId();
   observer.dispatch("PAGE_CHANGE", pageId);
 });
 

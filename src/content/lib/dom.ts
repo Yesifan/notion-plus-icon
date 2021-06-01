@@ -1,12 +1,15 @@
-import { delay } from './utils';
+import { delay } from '@/lib/utils';
+import { getQueryString } from './utils';
 
 const ICON_SELECTOR = '.notion-frame .notion-scroller .notion-record-icon';
+const SUB_ICON_SELECTOR = '.notion-peek-renderer .notion-scroller .notion-record-icon';
 const PANEL_SELECTOR = '.notion-default-overlay-container .notion-media-menu';
 const PANEL_MASK_SELECTOR = '.notion-default-overlay-container div[style*="100vw"]';
 
 export const getIconDom = () => {
+  const isSubPage = getQueryString('p')
   return new Promise<Element>(resolve => {
-    const dom = document.querySelector(ICON_SELECTOR);
+    const dom = document.querySelector(isSubPage?SUB_ICON_SELECTOR:ICON_SELECTOR)
     if(dom) resolve(dom);
     else delay(100).then(getIconDom).then(resolve);
   })

@@ -2,7 +2,7 @@ import storage, { getStorage, ICON_STORAGE_KEY } from '@/lib/storage';
 
 import { StorageIcons } from '../lib/notion';
 import { getIconDom, getIconPanel, getPanelMask } from '../lib/dom';
-import { delay } from '../lib/utils';
+import { delay } from '@/lib/utils';
 
 export * from './hooks';
 
@@ -16,6 +16,8 @@ export type TabType = number| 'plus';
 
 export default class Observer {
   pageId?:string;
+  isSubPage = false;
+
   icons: StorageIcons = { default:[] };
 
   current:TabType = 0;
@@ -60,6 +62,7 @@ export default class Observer {
         break;
       case 'ICON_CONTAINER_CHANGE':
         const iconContainer = await getIconDom();
+        console.log(iconContainer)
         if(iconContainer === this.iconContainer) return;
         this.iconContainer = iconContainer;
         this.iconObserver?.disconnect();
