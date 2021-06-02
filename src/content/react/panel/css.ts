@@ -15,19 +15,19 @@ export const columnFlex:CSSProperties = {
   flexDirection: 'column'
 }
 
-export const title:CSSProperties = {
+export const title = (mode:string):CSSProperties => ({
   display: "flex",
   paddingLeft: "14px",
   paddingRight: "14px",
   marginTop: "6px",
   marginBottom: "8px",
-  color: "rgba(55, 53, 47, 0.6)",
+  color: mode==="dark"?"rgba(255, 255, 255, 0.6)" : "rgba(55, 53, 47, 0.6)",
   fontSize: "11px",
   fontWeight: 500,
   lineHeight: "120%",
   userSelect: "none",
   textTransform: "uppercase"
-}
+})
 
 export const ellipsis:CSSProperties = {
   whiteSpace: 'nowrap',

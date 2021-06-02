@@ -3,10 +3,6 @@ import { ObserverContext } from './provider';
 
 import Observer from './index'
 
-interface Selector {
-  (observer:Observer): any
-}
-
 export const useObserverContext = () => {
   const observer = <Observer>useContext(ObserverContext);
   return observer;
@@ -21,11 +17,13 @@ export interface ObserverSelectorHook {
 export const useSelector:ObserverSelectorHook = (selector) => {
   const observer = useObserverContext();
   const newState = selector(observer);
-  const [ state, setState] = useState<any>(newState);
+  const [state, setState] = useState<any>(newState);
   useEffect(()=>{
     return observer.subscribe((observer)=>{
       const newState = selector(observer);
-      if(newState !== state) setState(newState);
+      if(newState !== state) {
+        setState(newState);
+      }
     })
   }, [observer])
   return state;

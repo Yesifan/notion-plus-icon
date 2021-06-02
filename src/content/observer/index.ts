@@ -12,8 +12,14 @@ interface Callback {
 
 const ICON_CLASS = 'notion-record-icon';
 const PAGE_CONTENT = 'notion-page-content';
+
+interface Theme {
+  mode:"light"|"dark"
+}
 export default class Observer {
   pageId?:string;
+
+  theme:Theme = { mode: "light" };
 
   icons: StorageIcons = { default:[] };
 
@@ -27,7 +33,7 @@ export default class Observer {
 
   mask?: HTMLElement;
 
-  private observers?: Callback[] = [];
+  private observers: Callback[] = [];
 
   constructor(pageId:string){
     this.storageObserver();
@@ -36,9 +42,10 @@ export default class Observer {
   }
   
   subscribe(callback:Callback){
-    this.observers?.push(callback);
+    this.observers.push(callback);
     return () => {
-      this.observers?.filter(item => item!==callback);
+      console.log('unsubscribe')
+      this.observers.filter(item=>item!==callback);
     }
   }
 
@@ -63,7 +70,8 @@ export default class Observer {
         this.mask?.click();
         break;
       case 'SHOW_NOTION_ICON_PANEL':
-        this.dispatch('TAB_CHANGE', 0);
+        this.current = 0;
+        this.theme = getTheme();
         const { tab, tabs, tabsBar, panelContainer } = await getIconPanel();
         this.mask = getPanelMask();
         if(this.panelContainer === panelContainer) return;
@@ -79,18 +87,7 @@ export default class Observer {
         })
         break;
     }
-    this.observers?.forEach(callback => callback(this));
-  }
-
-  private async iconClickListener(){
-    document.addEventListener('click', (event)=>{
-      const path:HTMLElement[] = (<any>event).path;
-      const isIcon = path.find(element => element?.className?.includes(ICON_CLASS));
-      const isContent = path.find(element => element?.className?.includes(PAGE_CONTENT));
-      if(isIcon&&!isContent){
-        this.dispatch('SHOW_NOTION_ICON_PANEL')
-      }
-    })
+    this.observers.forEach(callback => callback(this));
   }
 
   private async storageObserver(){
@@ -103,6 +100,26 @@ export default class Observer {
         this.dispatch('STORAGE_ICONS_CHANGE', newValue);
       }
     })
+  }
+
+  private async iconClickListener(){
+    document.addEventListener('click', (event)=>{
+      const path:HTMLElement[] = (<any>event).path;
+      const isIcon = path.find(element => element?.className?.indexOf?.(ICON_CLASS)>=0);
+      const isContent = path.find(element => element?.className?.indexOf?.(PAGE_CONTENT)>=0);
+      if(isIcon&&!isContent){
+        this.dispatch('SHOW_NOTION_ICON_PANEL')
+      }
+    })
+  }
+}
+
+export function getTheme():Theme{
+  const theme = localStorage.getItem('theme');
+  try{
+    return theme ? JSON.parse(theme) : { mode: 'light' };
+  }catch(e){
+    return { mode: 'light' }
   }
 }
 
@@ -123,11 +140,11 @@ function changeNotionSearch(element:Element, isPlus:boolean){
 
 function changeNotionUnderline(tabs:Element[], isPlus:boolean, prev:TabType, current:TabType){
   if(isPlus && typeof prev === 'number'){
-    const tab = tabs[prev]
+    const tab = tabs[prev];
     const underline = <HTMLElement>tab.childNodes[1];
     underline && (underline.style.display = "none");
   }else if(typeof current === 'number'){
-    const tab = tabs[current]
+    const tab = tabs[current];
     const underline = <HTMLElement>tab.childNodes[1];
     underline && (underline.style.display = "block");
   }

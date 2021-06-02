@@ -10,7 +10,7 @@ export const container:CSSProperties = {
   position: 'relative'
 }
 
-export const tab:CSSProperties = {
+export const tab = (mode:string):CSSProperties => ({
   userSelect: 'none',
   transition: 'background 20ms ease-in 0s',
   cursor: 'pointer', display: 'inline-flex',
@@ -24,13 +24,13 @@ export const tab:CSSProperties = {
   minWidth: 0,
   paddingLeft: '8px',
   paddingRight: '8px',
-  color: 'rgb(55, 53, 47)',
-}
+  color: mode === 'dark' ? 'rgba(255, 255, 255, 0.9)' : 'rgb(55, 53, 47)'
+})
 
-export const underline:CSSProperties = {
-  borderBottom: '2px solid rgb(55, 53, 47)', 
+export const underline = (mode:string):CSSProperties => ({
+  borderBottom: `2px solid ${mode==="dark"?'rgba(255, 255, 255, 0.9)':'rgb(55, 53, 47)'}`, 
   position: 'absolute', 
   bottom: '-7px', 
   left: '8px', 
   right: '8px'
-}
+})

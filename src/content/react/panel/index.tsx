@@ -14,9 +14,9 @@ import * as styles from './css';
 
 const ROW_SIZE = 12;
 
-const SubTitle:React.FC = ({children}) => {
+const SubTitle:React.FC<{theme:string}> = ({children, theme}) => {
   return (
-    <div style={styles.title}>
+    <div style={styles.title(theme)}>
       <div style={styles.ellipsis}>{children}</div>
       <div style={{marginLeft: "auto"}}></div>
     </div>
@@ -25,7 +25,8 @@ const SubTitle:React.FC = ({children}) => {
 
 const App:React.FC = () => {
   const dispatch = useDispatch();
-  const [tab, icons, pageId, container] = useSelector(state => [state.current, state.icons, state.pageId, state.panelContainer]);
+  const mode = useSelector(state => state.theme.mode);
+  const [icons, pageId, container] = useSelector(state => [state.icons, state.pageId, state.panelContainer]);
   const setIcon = useCallback(async (url:string, signedGetUrl:string, isUpload = false)=>{
     dispatch('HIDE_NOTION_ICON_PANEL')
     return pageId && setPageIcon(pageId, url, signedGetUrl, isUpload);
@@ -44,7 +45,7 @@ const App:React.FC = () => {
     },[[]])
   }, [icons, pageId]);
 
-  if(!container||tab!=='plus') return null;
+  if(!container) return null;
   return createPortal(
     <div style={styles.columnFlex}>
       <div style={styles.toolRow}>
@@ -53,7 +54,7 @@ const App:React.FC = () => {
       </div>
       <div style={{flexGrow: 1}}>
         <div style={styles.padding}>
-          <SubTitle>Recent</SubTitle>
+          <SubTitle theme={mode}>Recent</SubTitle>
           <div style={styles.iconContainer}>
             {wrap.map((row, index) => (
             <div style={{display:'flex'}} key={index}>
