@@ -79,10 +79,11 @@ export default class Observer {
         this.tabsBar = tabsBar;
         this.panelContainer = panelContainer;
         // watching notion tab click
-        this.tabs?.slice?.(0, -2).forEach((tab, index) => {
-          tab.addEventListener('click', () => {
-            this.dispatch('TAB_CHANGE', index);
-          })
+        const [emoji, upload, link] = <HTMLElement[]>this.tabs||[];
+        upload && (upload.style.display = "none");
+        link && (link.style.display = "none");
+        emoji?.addEventListener('click', () => {
+          this.dispatch('TAB_CHANGE', 0);
         })
         break;
     }
