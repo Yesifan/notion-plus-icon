@@ -1,44 +1,45 @@
 import storage, { getStorage, ICON_STORAGE_KEY } from '@/lib/storage';
 
 import { StorageIcons } from '../lib/notion';
-import { getIconDom, getIconPanel, getPanelMask } from '../lib/dom';
-import { delay } from '@/lib/utils';
+import { getIconPanel, getPanelMask } from '../lib/dom';
 
 export * from './hooks';
-
 export { default as Provider } from './provider';
-
+export type TabType = number| 'plus';
 interface Callback {
   (observer:Observer): void
 }
 
-export type TabType = number| 'plus';
-
+const ICON_CLASS = 'notion-record-icon';
+const PAGE_CONTENT = 'notion-page-content';
 export default class Observer {
   pageId?:string;
-  isSubPage = false;
 
   icons: StorageIcons = { default:[] };
 
   current:TabType = 0;
   private previous?: TabType;
 
+  tab?: Element|null; // <Tab/> container
+  tabs?: Element[]|null;
+  tabsBar?: Element|null;
+  panelContainer?: Element|null;// <Panel/> container
+
   mask?: HTMLElement;
 
-  icon?: Element;
-  iconContainer? :Element;
-
-  tab?: Element; // <Tab/> container
-  tabs?: Element[];
-  tabsBar?: Element;
-  panelContainer?: Element;// <Panel/> container
-
   private observers?: Callback[] = [];
-  private iconObserver?: MutationObserver;
 
   constructor(pageId:string){
     this.storageObserver();
+    this.iconClickListener();
     this.dispatch('PAGE_CHANGE', pageId);
+  }
+  
+  subscribe(callback:Callback){
+    this.observers?.push(callback);
+    return () => {
+      this.observers?.filter(item => item!==callback);
+    }
   }
 
   async dispatch(type:string, payload?:any){
@@ -57,21 +58,6 @@ export default class Observer {
         break;
       case 'PAGE_CHANGE':
         this.pageId = payload;
-        await delay(100);
-        this.dispatch("ICON_CONTAINER_CHANGE");
-        break;
-      case 'ICON_CONTAINER_CHANGE':
-        const iconContainer = await getIconDom();
-        if(iconContainer === this.iconContainer) return;
-        this.iconContainer = iconContainer;
-        this.iconObserver?.disconnect();
-        this.iconObserver = new MutationObserver(()=>this.dispatch("ICON_CHANGE"));
-        this.iconObserver.observe(this.iconContainer, {childList: true});
-      case 'ICON_CHANGE':
-        const icon = <Element>this.iconContainer?.firstChild;
-        if(this.icon === icon) return;
-        this.icon = icon;
-        this.icon.addEventListener('click', () => this.dispatch("SHOW_NOTION_ICON_PANEL"));
         break;
       case 'HIDE_NOTION_ICON_PANEL':
         this.mask?.click();
@@ -93,14 +79,19 @@ export default class Observer {
         })
         break;
     }
+    console.log(type)
     this.observers?.forEach(callback => callback(this));
   }
 
-  subscribe(callback:Callback){
-    this.observers?.push(callback);
-    return () => {
-      this.observers?.filter(item => item!==callback);
-    }
+  private async iconClickListener(){
+    document.addEventListener('click', (event)=>{
+      const path:HTMLElement[] = (<any>event).path;
+      const isIcon = path.find(element => element?.className?.includes(ICON_CLASS));
+      const isContent = path.find(element => element?.className?.includes(PAGE_CONTENT));
+      if(isIcon&&!isContent){
+        this.dispatch('SHOW_NOTION_ICON_PANEL')
+      }
+    })
   }
 
   private async storageObserver(){
@@ -116,6 +107,7 @@ export default class Observer {
   }
 }
 
+//#region change notion dom
 function changeNotionPanel(element:Element, isPlus:boolean){
   const panels = <HTMLElement[]>Array.from(element.childNodes);
   panels?.forEach(panel => {
@@ -141,3 +133,4 @@ function changeNotionUnderline(tabs:Element[], isPlus:boolean, prev:TabType, cur
     underline && (underline.style.display = "block");
   }
 }
+//#endregion
