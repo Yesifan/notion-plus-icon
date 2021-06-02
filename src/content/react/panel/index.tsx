@@ -48,7 +48,7 @@ const App:React.FC = () => {
   return createPortal(
     <div style={styles.columnFlex}>
       <div style={styles.toolRow}>
-        <Upload onUpload={(url, src)=>setIcon(url, src, true)}/>
+        <Upload style={{width:'70px'}} onUpload={(url, src)=>setIcon(url, src, true)}/>
         <Link onClick={(url)=>setIcon(url, url)}/>
       </div>
       <div style={{flexGrow: 1}}>

@@ -22,12 +22,27 @@ export function chooseFile(accept = 'image/*', multiple = false):Promise<File[]|
 
   document.body.appendChild(input);
 
-  return new Promise((resolve) => {
+  return new Promise((resolve, reject) => {
+    let times = 0;
+    let isChange = false;
+    input.onfocus = () => {
+      times++;
+      if(times < 2) return;
+      setTimeout(()=>{
+        if(!isChange) reject();
+        document.body.removeChild(input);
+      },100)
+    }
     input.onchange = () => {
-      if(multiple) resolve(Array.from(input.files || []));
-      else resolve(input.files?.item(0));
-      document.body.removeChild(input);
+      isChange = true;
+      if(input.files&&input.files.item(0)){
+        if(multiple) resolve(Array.from(input.files));
+        else resolve(input.files.item(0));
+      }else{
+        reject()
+      }
     };
+    input.focus();
     input.click();
   });
 }

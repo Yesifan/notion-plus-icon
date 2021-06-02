@@ -79,7 +79,6 @@ export default class Observer {
         })
         break;
     }
-    console.log(type)
     this.observers?.forEach(callback => callback(this));
   }
 
