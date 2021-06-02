@@ -17,11 +17,12 @@ export interface ObserverSelectorHook {
 export const useSelector:ObserverSelectorHook = (selector) => {
   const observer = useObserverContext();
   const newState = selector(observer);
-  const [state, setState] = useState<any>(newState);
+  let [state, setState] = useState<any>(newState);
   useEffect(()=>{
     return observer.subscribe((observer)=>{
       const newState = selector(observer);
       if(newState !== state) {
+        state = newState;
         setState(newState);
       }
     })

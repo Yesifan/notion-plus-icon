@@ -44,8 +44,7 @@ export default class Observer {
   subscribe(callback:Callback){
     this.observers.push(callback);
     return () => {
-      console.log('unsubscribe')
-      this.observers.filter(item=>item!==callback);
+      this.observers = this.observers.filter(item=>item!==callback);
     }
   }
 

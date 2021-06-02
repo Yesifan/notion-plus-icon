@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useEffect, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 
 import { useSelector, useDispatch } from '@/content/observer';
@@ -26,7 +26,7 @@ const SubTitle:React.FC<{theme:string}> = ({children, theme}) => {
 const App:React.FC = () => {
   const dispatch = useDispatch();
   const mode = useSelector(state => state.theme.mode);
-  const [icons, pageId, container] = useSelector(state => [state.icons, state.pageId, state.panelContainer]);
+  const [tab, icons, pageId, container] = useSelector(state => [state.current, state.icons, state.pageId, state.panelContainer]);
   const setIcon = useCallback(async (url:string, signedGetUrl:string, isUpload = false)=>{
     dispatch('HIDE_NOTION_ICON_PANEL')
     return pageId && setPageIcon(pageId, url, signedGetUrl, isUpload);
@@ -45,7 +45,7 @@ const App:React.FC = () => {
     },[[]])
   }, [icons, pageId]);
 
-  if(!container) return null;
+  if(!container||tab!=='plus') return null;
   return createPortal(
     <div style={styles.columnFlex}>
       <div style={styles.toolRow}>
