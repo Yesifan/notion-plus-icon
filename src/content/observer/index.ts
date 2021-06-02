@@ -11,6 +11,7 @@ interface Callback {
 }
 
 const ICON_CLASS = 'notion-record-icon';
+const SIDEBAR = 'notion-sidebar-container';
 const PAGE_CONTENT = 'notion-page-content';
 
 interface Theme {
@@ -107,14 +108,15 @@ export default class Observer {
       const path:HTMLElement[] = (<any>event).path;
       const isIcon = path.find(element => element?.className?.indexOf?.(ICON_CLASS)>=0);
       const isContent = path.find(element => element?.className?.indexOf?.(PAGE_CONTENT)>=0);
-      if(isIcon&&!isContent){
+      const isSideBar = path.find(element => element?.className?.indexOf?.(SIDEBAR)>=0);
+      if(isIcon&&!isContent&&!isSideBar){
         this.dispatch('SHOW_NOTION_ICON_PANEL')
       }
     })
   }
 }
 
-export function getTheme():Theme{
+function getTheme():Theme{
   const theme = localStorage.getItem('theme');
   try{
     return theme ? JSON.parse(theme) : { mode: 'light' };

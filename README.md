@@ -19,5 +19,8 @@
 <br>
 
 ## features
-- [X] memory link and file icons
+- [X] Caching links and upload icons.
+
+  - Uploaded icons can only be used for the current page and the cache will expire after a period of time because of Notion.
+
 - [ ] icons library

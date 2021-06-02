@@ -17,7 +17,7 @@ const App:React.FC = () => {
   return createPortal(
     <div style={contanerStyle}>
       <Hover onClick={handleClick} style={tabStyle(mode)}>
-        Plus
+        Icon plus
       </Hover>
       {tab === "plus" && <div style={underline(mode)}/>}
     </div>,
