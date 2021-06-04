@@ -4,7 +4,10 @@ const paths = require("./paths");
 
 const config = {
   mode: 'production',
-  entry: paths.entry,
+  entry: {
+    content: paths.content,
+    background: paths.background,
+  },
   output: {
     path: paths.build,
     filename: "[name].js",

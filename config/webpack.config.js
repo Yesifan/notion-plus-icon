@@ -1,11 +1,13 @@
-const webpack = require("webpack");
 const CopyPlugin = require("copy-webpack-plugin");
 
 const paths = require("./paths");
 
 const config = {
   mode: 'development',
-  entry: paths.entry,
+  entry: {
+    content: [paths.contentClient, paths.content],
+    background: [paths.backgroundClient, paths.background],
+  },
   devtool: 'cheap-module-source-map',
   output: {
     path: paths.build,
@@ -20,14 +22,10 @@ const config = {
     port: 3333,
     https: true,
     writeToDisk: true,
+    transportMode: 'ws',
     allowedHosts: ['.notion.so'],
-    setup(app){
-      app.all('*', function(req, res, next) {
-        res.header("Access-Control-Allow-Origin", "*");
-        res.header("Access-Control-Allow-Headers", "X-Requested-With");
-        res.header("Access-Control-Allow-Methods","PUT,POST,GET,DELETE,OPTIONS");
-        next();
-      });
+    headers:{
+      "Access-Control-Allow-Origin": "https://www.notion.so"
     }
   },
   resolve:{
@@ -54,7 +52,6 @@ const config = {
     ]
   },
   plugins: [
-    new webpack.HotModuleReplacementPlugin(),
     new CopyPlugin({
       patterns: [{ from: "public", to: "." }]
     }),

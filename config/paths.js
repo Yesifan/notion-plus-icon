@@ -6,9 +6,9 @@ const resolveSrc = _path => path.resolve(src, _path)
 
 module.exports = {
   src,
-  entry:{
-    content: resolveSrc('content/index.tsx'),
-    background: resolveSrc('background/index.ts'),
-  },
+  content: resolveSrc('content/index.tsx'),
+  contentClient: resolveSrc('hot-client/content.ts'),
+  background: resolveSrc('background/index.ts'),
+  backgroundClient: resolveSrc('hot-client/content.ts'),
   build: path.join(__dirname, "../dist")
 }
