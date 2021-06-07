@@ -1,4 +1,7 @@
+const path = require("path");
+
 const CopyPlugin = require("copy-webpack-plugin");
+const HtmlWebpackPlugin = require('html-webpack-plugin');
 
 const paths = require("./paths");
 
@@ -33,8 +36,20 @@ const config = {
   },
   plugins: [
     new CopyPlugin({
-      patterns: [{ from: "public", to: "." }]
+      patterns: [{ 
+        from: "public",
+        to: ".",
+        filter: file => {
+          return path.normalize(file) !== paths.popupHtml
+        },
+      }]
     }),
+    new HtmlWebpackPlugin({
+      inject: true,
+      template: paths.popupHtml,
+      filename: 'popup.html',
+      chunks: ['popup'],
+    })
   ],
 }
 

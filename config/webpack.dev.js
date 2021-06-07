@@ -8,6 +8,7 @@ const paths = require("./paths");
 const config = merge(base, {
   mode: 'development',
   entry: {
+    popup: paths.popup,
     content: paths.content,
     background: [paths.backgroundClient, paths.background],
   },

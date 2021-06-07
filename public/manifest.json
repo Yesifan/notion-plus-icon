@@ -19,5 +19,11 @@
       "matches": ["https://www.notion.so/*"],
       "js": ["content.js"]
     }
-  ]
+  ],
+  "action":{
+		"default_icon": {
+      "48": "icon48.png"
+    },
+		"default_popup": "popup.html"
+	}
 }
