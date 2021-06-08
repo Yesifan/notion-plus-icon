@@ -10,6 +10,7 @@ const config = {
     path: paths.build,
     filename: "[name].js",
     chunkFilename:"static/js/[name].chunk.js",
+    clean: true
   },
   resolve:{
     alias: {

@@ -1,6 +1,6 @@
 const { merge } = require("webpack-merge");
 
-const base = require("./webpack.base");
+const base = require("./webpack.config");
 const ResetEntryPlugin = require("./reset-entry-plugin");
 
 const paths = require("./paths");
