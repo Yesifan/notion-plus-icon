@@ -65,6 +65,7 @@ export default class Observer {
         break;
       case 'PAGE_CHANGE':
         this.pageId = payload;
+        console.log(payload);
         break;
       case 'HIDE_NOTION_ICON_PANEL':
         this.mask?.click();
