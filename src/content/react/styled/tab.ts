@@ -1,21 +1,21 @@
 import styled from '@emotion/styled';
 
-export const Container = styled.div`
+export const Container = styled.div(({theme})=>`
   padding-top: 6px;
   white-space: nowrap;
   min-width: 0px;
   flex-shrink: 0;
-  color: rgb(55, 53, 47);
+  color: ${theme.color};
   position: relative;
-`
+`)
 
-export const Underline = styled.div`
-  border-bottom: 2px solid rgb(55, 53, 47);
+export const Underline = styled.div(({theme})=>`
+  border-bottom: ${`2px solid ${theme.underline}`};
   position: absolute;
   bottom: -7px;
   left: 8px;
   right: 8px;
-`
+`)
 
 export const Icon = styled.img`
   width: 18px;

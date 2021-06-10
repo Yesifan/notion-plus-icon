@@ -7,6 +7,18 @@ export function getQueryString(name:string, href = location.href) {
   return null;
 }
 
+interface Theme {
+  mode:"light"|"dark"
+}
+export function getTheme():Theme{
+  const theme = localStorage.getItem('theme');
+  try{
+    return theme ? JSON.parse(theme) : { mode: 'light' };
+  }catch(e){
+    return { mode: 'light' }
+  }
+}
+
 export const parseClassName = (...classname: (string|undefined)[]) => {
   return classname.filter(Boolean).join(' ');
 }

@@ -1,10 +1,10 @@
 import styled from "@emotion/styled";
 
 interface HoverProps {
-  button?: boolean
+  button?: 'button'|'default'
 }
 
-const Hover = styled.div<HoverProps>`
+const Hover = styled.div<HoverProps>(({theme:{hover}, button="default"})=>`
   user-select: none;
   cursor: pointer;
   display: inline-flex;
@@ -18,17 +18,16 @@ const Hover = styled.div<HoverProps>`
   min-width: 0px;
   padding-left: 8px;
   padding-right: 8px;
-  color: rgb(55, 53, 47);
   transition: background 20ms ease-in 0s;
   &:hover {
-    background: ${({button}) => button ? 'hotpink' : 'rgba(55, 53, 47, 0.08)'};
+    background: ${hover.color[button]};
     &:active{
-      background: ${({button}) => button ? 'hotpink' : 'rgba(55, 53, 47, 0.16)'};
+      background: ${hover.color2[button]};
     }
   }
   &:active {
-    background: ${({button}) => button ? 'hotpink' : 'rgba(55, 53, 47, 0.08)'};
+    background: ${hover.color[button]};
   }
-`
+`)
 
 export default Hover;

@@ -1,11 +1,14 @@
 import { render } from 'react-dom';
+import { ThemeProvider } from '@emotion/react'
 
 import Observer, { Provider } from './observer';
 
 import Tab from './react/tab';
 import Panel from './react/panel';
 
-import { getCurrentPageId } from './lib/utils';
+import { getCurrentPageId, getTheme } from './lib/utils';
+
+import { light, dark } from '@/theme';
 
 const { runtime } = chrome;
 
@@ -18,10 +21,14 @@ runtime.onMessage.addListener(()=>{
 });
 
 const App = () => {
+  const { mode } = getTheme();
+  const theme = mode === 'dark' ? dark : light;
   return (
     <Provider observer={observer}>
-      <Tab/>
-      <Panel/>
+      <ThemeProvider theme={theme}>
+        <Tab/>
+        <Panel/>
+      </ThemeProvider>
     </Provider>
   )
 }

@@ -4,7 +4,7 @@ const Menu = styled.div`
   width: 160px;
   display: flex;
   flex-direction: column;
-  background: ${({theme}) => theme.background};
+  background: ${({theme}) => theme.menu.background};
 `
 
 export const Group = styled.div`
@@ -18,14 +18,14 @@ const A = styled.a`
   align-items: center;
   padding: 6px 8px;
   font-size: 12px;
-  color: ${({theme}) => theme.color};
+  color: ${({theme}) => theme.menu.color};
   border-radius: 4px;
   text-decoration: none;
   font-weight: 400;
   overflow: hidden;
   transition: background-color 150ms cubic-bezier(0.4, 0, 0.2, 1) 0ms;
   &:hover {
-    background: ${({theme}) => theme.hoverColor};
+    background: ${({theme}) => theme.menu.hoverColor};
   }
 `
 
