@@ -1,19 +1,19 @@
+import { useCallback, useState } from 'react';
+
 import { useSelector } from '@/content/observer';
 
-import Button, { styles } from '../button';
-import Loading from '../../icons/loading';
+import Button from './button';
+import { Loading } from '@/icons';
+import { Ellipsis } from '@/content/react/styled';
 
-import { chooseFile } from '@/content/lib/utils';
 import { upload } from '@/content/lib/notion';
-
-import { overflow } from './css';
-import { useCallback, useState } from 'react';
+import { chooseFile } from '@/content/lib/utils';
 
 export interface UploadProps extends React.HTMLAttributes<HTMLDivElement> {
   onUpload?: (url:string, awsUrl:string) => void
 }
 
-const App:React.FC<UploadProps> = ({children, style, onUpload, ...props}) => {
+const App:React.FC<UploadProps> = ({children, onUpload, ...props}) => {
   const [isLoading, setLoading] = useState(false);
   const pageId = useSelector(({pageId}) => pageId);
   const handleClick = useCallback(async () => {
@@ -29,11 +29,11 @@ const App:React.FC<UploadProps> = ({children, style, onUpload, ...props}) => {
   },[pageId])
 
   return (
-    <div style={overflow}>
-      <Button onClick={handleClick} style={{...styles.block,...style}} {...props}>
+    <Ellipsis>
+      <Button type="primary" onClick={handleClick} {...props}>
         {isLoading ? <Loading/> : 'Upload'}
       </Button>
-    </div>
+    </Ellipsis>
   )
 }
 

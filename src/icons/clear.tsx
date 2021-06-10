@@ -1,3 +1,5 @@
+import styled from "@emotion/styled";
+
 const App:React.FC<React.SVGProps<SVGSVGElement>> = (props) => {
   return (
     <svg viewBox="0 0 30 30" {...props}>
@@ -6,4 +8,11 @@ const App:React.FC<React.SVGProps<SVGSVGElement>> = (props) => {
   )
 }
 
-export default App;
+export default styled(App)<{size?:number}>(({theme, size=14})=>`
+  width: ${size+'px'};
+  height: ${size+'px'};
+  display: block;
+  fill: ${theme.clear};
+  flex-shrink: 0;
+  backface-visibility: hidden;
+`);

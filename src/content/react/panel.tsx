@@ -1,31 +1,37 @@
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useMemo } from 'react';
 import { createPortal } from 'react-dom';
 
 import { useSelector, useDispatch } from '@/content/observer';
 
-import Icon from '../components/icon';
-import Hover from '../components/hover';
-import Link from '../components/link';
-import Upload from '../components/upload';
+import Icon from './components/icon';
+import Link from './components/link';
+import Button from './components/button';
+import Upload from './components/upload';
+
+import { Panel, Ellipsis, Flex, ColumnFlex } from '@/content/react/styled';
 
 import { setPageIcon, Icon as IconProps } from '@/content/lib/notion';
 
-import * as styles from './css';
-
 const ROW_SIZE = 12;
 
-const SubTitle:React.FC<{theme:string}> = ({children, theme}) => {
+const icon:React.CSSProperties = {
+  width: '32px',
+  height: '32px',
+  fontSize: '24px',
+  borderRadius: '3px',
+  justifyContent: 'center'
+}
+
+const SubTitle:React.FC = ({children}) => {
   return (
-    <div style={styles.title(theme)}>
-      <div style={styles.ellipsis}>{children}</div>
-      <div style={{marginLeft: "auto"}}></div>
-    </div>
+    <Panel.Title>
+      <Ellipsis>{children}</Ellipsis>
+    </Panel.Title>
   )
 }
 
 const App:React.FC = () => {
   const dispatch = useDispatch();
-  const mode = useSelector(state => state.theme.mode);
   const [tab, icons, pageId, container] = useSelector(state => [state.current, state.icons, state.pageId, state.panelContainer]);
   const setIcon = useCallback(async (url:string, signedGetUrl:string, isUpload = false)=>{
     dispatch('HIDE_NOTION_ICON_PANEL')
@@ -47,27 +53,27 @@ const App:React.FC = () => {
 
   if(!container||tab!=='plus') return null;
   return createPortal(
-    <div style={styles.columnFlex}>
-      <div style={styles.toolRow}>
+    <ColumnFlex>
+      <Flex style={{ margin:'12px 0 6px 0', padding:'0 12px'}}>
         <Upload style={{width:'70px'}} onUpload={(url, src)=>setIcon(url, src, true)}/>
         <Link onClick={(url)=>setIcon(url, url)}/>
-      </div>
+      </Flex>
       <div style={{flexGrow: 1}}>
-        <div style={styles.padding}>
-          <SubTitle theme={mode}>Recent</SubTitle>
-          <div style={styles.iconContainer}>
+        <div style={{ padding:'6px 0' }}>
+          <SubTitle>Recent</SubTitle>
+          <ColumnFlex style={{padding:'0 12px', marginBottom:'1px'}}>
             {wrap.map((row, index) => (
-            <div style={{display:'flex'}} key={index}>
+            <Flex key={index}>
               {row.map(({src, url}) => (
-              <Hover key={url} style={styles.icon} onClick={()=>setIcon(url, src)}>
-                <Icon alt="img-url" aria-label="img-url" style={styles.img} src={src}/>
-              </Hover>))}
-            </div>))}
-          </div>
+              <Button key={url} style={icon} onClick={()=>setIcon(url, src)}>
+                <Icon size={24} alt="img-url" aria-label="img-url" src={src}/>
+              </Button>))}
+            </Flex>))}
+          </ColumnFlex>
         </div>
         <div></div>
       </div>
-    </div>,
+    </ColumnFlex>,
     container
   )
 }
