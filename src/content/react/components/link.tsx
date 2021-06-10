@@ -1,28 +1,34 @@
-import Input from '../input';
-import Button from '../button';
-
-import * as styles from './css';
 import { useState } from 'react';
 
+import Input from './input';
+import Button from './button';
+
+import { Flex } from '@/content/react/styled';
+import styled from '@emotion/styled';
 export interface LinkProps extends Omit<React.HTMLAttributes<HTMLDivElement>,'onClick'>{
   onClick:(value:string)=>void
 }
 
-const App:React.FC<LinkProps> = ({style, onClick, ...props}) => {
+const FlexCenter = styled(Flex)`
+  flex: 1;
+  align-items: 'center';
+`
+
+const App:React.FC<LinkProps> = ({onClick, ...props}) => {
   const [value, setValue] = useState<string>('');
 
   return (
-    <div style={{...styles.wrap, ...style}} {...props}>
+    <FlexCenter {...props}>
       <Input
         type="url"
         value={value}
-        style={styles.link}
+        style={{ margin: '0 2px 0 8px' }}
         onChange={value => setValue(value)}
         placeholder="Paste an image link…"/>
       <Button type="primary" onClick={() => value && onClick(value)}>
         +
       </Button>
-    </div>
+    </FlexCenter>
   )
 }
 

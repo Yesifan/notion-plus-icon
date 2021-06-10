@@ -14,6 +14,7 @@ interface ButtonProps{
   type?: 'primary'|'radius'|'default'
 }
 const primarySytle = `
+  justify-content: center;
   padding: 0 12px;
   color:#fff;
   background: rgb(46, 170, 220);

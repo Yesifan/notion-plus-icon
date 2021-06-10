@@ -14,13 +14,8 @@ const ICON_CLASS = 'notion-record-icon';
 const SIDEBAR = 'notion-sidebar-container';
 const PAGE_CONTENT = 'notion-page-content';
 
-interface Theme {
-  mode:"light"|"dark"
-}
 export default class Observer {
   pageId?:string;
-
-  theme:Theme = { mode: "light" };
 
   icons: StorageIcons = { default:[] };
 
@@ -71,7 +66,6 @@ export default class Observer {
         break;
       case 'SHOW_NOTION_ICON_PANEL':
         this.current = 0;
-        this.theme = getTheme();
         const { tab, tabs, tabsBar, panelContainer } = await getIconPanel();
         this.mask = getPanelMask();
         if(this.panelContainer === panelContainer) return;
@@ -113,15 +107,6 @@ export default class Observer {
         this.dispatch('SHOW_NOTION_ICON_PANEL')
       }
     })
-  }
-}
-
-function getTheme():Theme{
-  const theme = localStorage.getItem('theme');
-  try{
-    return theme ? JSON.parse(theme) : { mode: 'light' };
-  }catch(e){
-    return { mode: 'light' }
   }
 }
 

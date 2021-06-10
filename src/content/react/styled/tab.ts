@@ -10,7 +10,7 @@ export const Container = styled.div(({theme})=>`
 `)
 
 export const Underline = styled.div(({theme})=>`
-  border-bottom: ${`2px solid ${theme.underline}`};
+  border-bottom: ${`2px solid ${theme.color}`};
   position: absolute;
   bottom: -7px;
   left: 8px;
