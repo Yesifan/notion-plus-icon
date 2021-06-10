@@ -1,36 +1,58 @@
-import { parseClassName } from '@/content/lib/utils'
-import { useState } from 'react';
+import styled from "@emotion/styled";
 
-import * as styles from './css';
-export * as styles from './block.css';
+import { parseClassName } from "@/content/lib/utils";
 
-export interface ButtonProps extends React.HTMLAttributes<HTMLDivElement> {
-  backgroundColors?: string[]
-}
-
-const colors = ["rgb(46, 170, 220)", "rgb(6, 156, 205)", "rgb(0, 141, 190)"];
-
-const App:React.FC<ButtonProps> = ({children, style, className, backgroundColors = colors, ...props}={}) => {
-  const { onMouseOver, onMouseOut, onMouseUp, onMouseDown, ..._props } = props;
-  const [ state, setState ] = useState<number>(0);
-  const handleInOut = (inOut:-1|1, event?:React.MouseEvent, callback?:Function) => {
-    setState(state => state + inOut);
-    callback?.(event);
-  }
-
+const Button:React.FC<React.HTMLAttributes<HTMLDivElement>> = ({children, className,...props}) => {
   return (
-    <div
-      role="button" tabIndex={-1}
-      {..._props}
-      style={{...styles.button, background:backgroundColors[state],...style}}
-      className={parseClassName("notion-focusable", className)}
-      onMouseOut={e => handleInOut(-1, e, onMouseOut)}
-      onMouseOver={e => handleInOut(1, e, onMouseOver)}
-      onMouseUp={e => handleInOut(-1, e, onMouseUp)}
-      onMouseDown={e => handleInOut(1, e, onMouseDown)}>
+    <div role="button" tabIndex={-1} className={parseClassName("notion-focusable", className)} {...props}>
       {children}
     </div>
   )
 }
 
-export default App;
+interface ButtonProps{
+  type?: 'primary'|'radius'|'default'
+}
+const primarySytle = `
+  padding: 0 12px;
+  color:#fff;
+  background: rgb(46, 170, 220);
+  &:hover {
+    background: rgb(6, 156, 205);
+    &:active{
+      background: rgb(0, 141, 190);
+    }
+  }
+  &:active {
+    background: rgb(6, 156, 205);
+  }
+`
+const radiusStyle = `
+  height: auto;
+  border-radius: 20px;
+`
+export default styled(Button)<ButtonProps>(({theme:{button}, type="default"})=>`
+  user-select: none;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  white-space: nowrap;
+  height: 28px;
+  border-radius: 3px;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.2;
+  min-width: 0px;
+  transition: background 20ms ease-in 0s;
+  &:hover {
+    background: ${button.color};
+    &:active{
+      background: ${button.color2};
+    }
+  }
+  &:active {
+    background: ${button.color};
+  }
+  ${type==='primary' ? primarySytle : type==='radius' ? radiusStyle : null}
+`)

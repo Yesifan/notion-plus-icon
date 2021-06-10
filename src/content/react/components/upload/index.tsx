@@ -1,6 +1,6 @@
 import { useSelector } from '@/content/observer';
 
-import Button, { styles } from '../button';
+import Button from '../button';
 import Loading from '../../icons/loading';
 
 import { chooseFile } from '@/content/lib/utils';
@@ -30,7 +30,7 @@ const App:React.FC<UploadProps> = ({children, style, onUpload, ...props}) => {
 
   return (
     <div style={overflow}>
-      <Button onClick={handleClick} style={{...styles.block,...style}} {...props}>
+      <Button type="primary" onClick={handleClick} style={{...style}} {...props}>
         {isLoading ? <Loading/> : 'Upload'}
       </Button>
     </div>

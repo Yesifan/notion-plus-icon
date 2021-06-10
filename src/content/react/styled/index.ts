@@ -2,7 +2,6 @@ import styled from '@emotion/styled';
 
 export * as Tab from './tab';
 export * as Panel from './panel';
-export { default as Hover } from './hover';
 
 export const Flex = styled.div`
   display: flex;

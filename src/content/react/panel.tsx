@@ -5,16 +5,16 @@ import { useSelector, useDispatch } from '@/content/observer';
 
 import Icon from './components/icon';
 import Link from './components/link';
+import Button from './components/button';
 import Upload from './components/upload';
 
-import { Panel, Hover, Ellipsis, Flex, ColumnFlex } from '@/content/react/styled';
+import { Panel, Ellipsis, Flex, ColumnFlex } from '@/content/react/styled';
 
 import { setPageIcon, Icon as IconProps } from '@/content/lib/notion';
 
 const ROW_SIZE = 12;
 
 const icon:React.CSSProperties = {
-  padding: 0,
   width: '32px',
   height: '32px',
   fontSize: '24px',
@@ -65,9 +65,9 @@ const App:React.FC = () => {
             {wrap.map((row, index) => (
             <Flex key={index}>
               {row.map(({src, url}) => (
-              <Hover key={url} style={icon} onClick={()=>setIcon(url, src)}>
+              <Button key={url} style={icon} onClick={()=>setIcon(url, src)}>
                 <Icon size={24} alt="img-url" aria-label="img-url" src={src}/>
-              </Hover>))}
+              </Button>))}
             </Flex>))}
           </ColumnFlex>
         </div>

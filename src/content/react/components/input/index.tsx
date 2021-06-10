@@ -8,8 +8,6 @@ export interface InputProps extends Omit<React.InputHTMLAttributes<HTMLInputElem
   onChange: (value:string) => void
 }
 
-const colors = ['transparent', 'rgba(55, 53, 47, 0.08)', 'rgba(55, 53, 47, 0.16)'];
-
 const App:React.FC<InputProps> = ({value, onChange, style, className, ...props}) => {
   const input = useRef<HTMLInputElement>(null);
   const handleClear = () => {
@@ -19,7 +17,7 @@ const App:React.FC<InputProps> = ({value, onChange, style, className, ...props})
   return (
     <div className="notion-focusable-within" style={{...styles.focusable, ...style}}>
       <input ref={input} value={value} onChange={e => onChange(e.target.value)} style={styles.input} {...props}/>
-      {value&&<Button style={styles.clear} backgroundColors={colors} onClick={handleClear}>
+      {value && <Button type="radius" onClick={handleClear}>
         <ClearIcon className="clearInput" style={styles.svg}/>
       </Button>}
     </div>

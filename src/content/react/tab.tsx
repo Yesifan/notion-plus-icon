@@ -2,7 +2,8 @@ import { createPortal } from 'react-dom';
 
 import { useSelector, useDispatch } from '@/content/observer'
 
-import { Tab, Hover } from '@/content/react/styled'
+import Button from '@/content/react/components/button'
+import { Tab } from '@/content/react/styled'
 
 const icon = chrome.runtime.getURL('/icon@48.png');
 
@@ -16,9 +17,9 @@ const App:React.FC = () => {
   if(!tabContainer) return null;
   return createPortal(
     <Tab.Container>
-      <Hover onClick={handleClick}>
+      <Button onClick={handleClick} style={{padding:'0 6px'}}>
         <Tab.Icon src={icon}/> Plus
-      </Hover>
+      </Button>
       {tab === "plus" && <Tab.Underline/>}
     </Tab.Container>,
     tabContainer
