@@ -1,4 +1,14 @@
+import styled from '@emotion/styled';
 import { CSSProperties } from 'react';
+
+export const Container = styled.div`
+  padding-top: 6px;
+  white-space: nowrap;
+  min-width: 0px;
+  flex-shrink: 0;
+  color: rgb(55, 53, 47);
+  position: relative;
+`
 
 export const container:CSSProperties = {
   paddingTop: '6px',
