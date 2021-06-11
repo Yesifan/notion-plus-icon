@@ -31,7 +31,7 @@ const App:React.FC<UploadProps> = ({children, onUpload, ...props}) => {
   return (
     <Ellipsis>
       <Button type="primary" onClick={handleClick} {...props}>
-        {isLoading ? <Loading/> : 'Upload'}
+        {isLoading ? <Loading className="loading-spinner"/> : 'Upload'}
       </Button>
     </Ellipsis>
   )

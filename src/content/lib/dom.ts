@@ -1,7 +1,13 @@
 import { delay } from '@/lib/utils';
 
-const PANEL_SELECTOR = '.notion-default-overlay-container .notion-media-menu';
-const PANEL_MASK_SELECTOR = '.notion-default-overlay-container div[style*="100vw"]';
+export const ICON_CLASS = 'notion-record-icon';
+export const SIDEBAR_CLASS = 'notion-sidebar-container';
+export const PAGE_CONTENT_CLASS = 'notion-page-content';
+
+export const ICON_SELECTOR = '.notion-frame>.notion-scroller>div:first-child .notion-record-icon';
+export const PANEL_SELECTOR = '.notion-default-overlay-container .notion-media-menu';
+export const PANEL_MASK_SELECTOR = '.notion-default-overlay-container div[style*="100vw"]';
+
 
 interface ExElement extends Element {
   tab?: Element,
@@ -9,6 +15,8 @@ interface ExElement extends Element {
   tabsBar?: Element,
   panelContainer?: Element,
 }
+
+export const getIcon = () => <HTMLElement>document.querySelector(ICON_SELECTOR);
 
 export const getIconPanel = () => {
   return new Promise<ExElement>(resolve => {

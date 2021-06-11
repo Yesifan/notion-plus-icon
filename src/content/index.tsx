@@ -5,6 +5,7 @@ import Observer, { Provider } from './observer';
 
 import Tab from './react/tab';
 import Panel from './react/panel';
+import Loading from './react/icon-loading';
 
 import { getCurrentPageId, getTheme } from './lib/utils';
 
@@ -28,6 +29,7 @@ const App = () => {
       <ThemeProvider theme={theme}>
         <Tab/>
         <Panel/>
+        <Loading/>
       </ThemeProvider>
     </Provider>
   )

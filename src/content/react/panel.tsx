@@ -8,7 +8,7 @@ import Link from './components/link';
 import Button from './components/button';
 import Upload from './components/upload';
 
-import { Panel, Ellipsis, Flex, ColumnFlex } from '@/content/react/styled';
+import { Panel, Ellipsis, Flex } from '@/content/react/styled';
 
 import { setPageIcon, Icon as IconProps } from '@/content/lib/notion';
 
@@ -34,13 +34,13 @@ const App:React.FC = () => {
   const dispatch = useDispatch();
   const [tab, icons, pageId, container] = useSelector(state => [state.current, state.icons, state.pageId, state.panelContainer]);
   const setIcon = useCallback(async (url:string, signedGetUrl:string, isUpload = false)=>{
-    dispatch('HIDE_NOTION_ICON_PANEL')
+    dispatch('UPLOAD_CHANGE', true);
+    dispatch('HIDE_NOTION_ICON_PANEL');
     return pageId && setPageIcon(pageId, url, signedGetUrl, isUpload);
-  },[pageId])
-  const wrap = useMemo(()=>{
+  },[pageId]);
+  const iconRows = useMemo(()=>{
     const linkIcons = icons.default||[];
     const pageIcons = icons[pageId!]||[];
-    
     return [...linkIcons, ...pageIcons]
     .sort((a, b)=> b.timestamp-a.timestamp)
     .reduce<IconProps[][]>((acc, url)=>{
@@ -53,7 +53,7 @@ const App:React.FC = () => {
 
   if(!container||tab!=='plus') return null;
   return createPortal(
-    <ColumnFlex>
+    <Flex column>
       <Flex style={{ margin:'12px 0 6px 0', padding:'0 12px'}}>
         <Upload style={{width:'70px'}} onUpload={(url, src)=>setIcon(url, src, true)}/>
         <Link onClick={(url)=>setIcon(url, url)}/>
@@ -61,19 +61,21 @@ const App:React.FC = () => {
       <div style={{flexGrow: 1}}>
         <div style={{ padding:'6px 0' }}>
           <SubTitle>Recent</SubTitle>
-          <ColumnFlex style={{padding:'0 12px', marginBottom:'1px'}}>
-            {wrap.map((row, index) => (
-            <Flex key={index}>
-              {row.map(({src, url}) => (
-              <Button key={url} style={icon} onClick={()=>setIcon(url, src)}>
-                <Icon size={24} alt="img-url" aria-label="img-url" src={src}/>
-              </Button>))}
-            </Flex>))}
-          </ColumnFlex>
+          <Flex column style={{padding:'0 12px', marginBottom:'1px'}}>
+            {iconRows.map((row, index) => (
+              <Flex key={index}>
+                {row.map(({src, url}) => (
+                  <Button key={url} style={icon} onClick={()=>setIcon(url, src)}>
+                    <Icon size={24} alt="img-url" aria-label="img-url" src={src}/>
+                  </Button>
+                ))}
+              </Flex>
+            ))}
+          </Flex>
         </div>
         <div></div>
       </div>
-    </ColumnFlex>,
+    </Flex>,
     container
   )
 }

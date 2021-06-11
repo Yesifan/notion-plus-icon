@@ -1,4 +1,4 @@
-import { parseClassName } from "@/content/lib/utils";
+import styled from "@emotion/styled";
 
 const Loading:React.FC<React.SVGProps<SVGSVGElement>> = (props) => {
   return (
@@ -8,10 +8,9 @@ const Loading:React.FC<React.SVGProps<SVGSVGElement>> = (props) => {
   )
 }
 
-const App:React.FC<React.SVGProps<SVGSVGElement>> = ({className, ...props}) => {
-  return (
-    <Loading className={parseClassName("loading-spinner", className)} {...props}/>
-  )
-}
+const App = styled(Loading)<{size?:number}>(({size = 14})=>`
+  width: ${size+'px'};
+  height: ${size+'px'};
+`)
 
 export default App
