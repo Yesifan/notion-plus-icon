@@ -1,7 +1,7 @@
 import storage, { getStorage, ICON_STORAGE_KEY } from '@/lib/storage';
 
 import { StorageIcons } from '../lib/notion';
-import { getIconPanel, getPanelMask } from '../lib/dom';
+import { getIconPanel, getPanelMask, ICON_CLASS, SIDEBAR_CLASS, PAGE_CONTENT_CLASS, getIcon } from '../lib/dom';
 
 export * from './hooks';
 export { default as Provider } from './provider';
@@ -9,10 +9,6 @@ export type TabType = number| 'plus';
 interface Callback {
   (observer:Observer): void
 }
-
-const ICON_CLASS = 'notion-record-icon';
-const SIDEBAR = 'notion-sidebar-container';
-const PAGE_CONTENT = 'notion-page-content';
 
 export default class Observer {
   pageId?:string;
@@ -22,11 +18,14 @@ export default class Observer {
   current:TabType = 0;
   private previous?: TabType;
 
+  uploading:Boolean = false;
+  
   tab?: Element|null; // <Tab/> container
   tabs?: Element[]|null;
   tabsBar?: Element|null;
   panelContainer?: Element|null;// <Panel/> container
 
+  icon?: HTMLElement;
   mask?: HTMLElement;
 
   private observers: Callback[] = [];
@@ -46,6 +45,10 @@ export default class Observer {
 
   async dispatch(type:string, payload?:any){
     switch(type){
+      case 'PAGE_CHANGE':
+        this.pageId = payload;
+        this.uploading = false;
+        break;
       case 'TAB_CHANGE':
         if(payload === this.current) return;
         this.previous = this.current;
@@ -58,8 +61,8 @@ export default class Observer {
       case 'STORAGE_ICONS_CHANGE':
         this.icons = payload||{ default:[] };
         break;
-      case 'PAGE_CHANGE':
-        this.pageId = payload;
+      case 'UPLOAD_CHANGE':
+        this.uploading = payload;
         break;
       case 'HIDE_NOTION_ICON_PANEL':
         this.mask?.click();
@@ -67,6 +70,7 @@ export default class Observer {
       case 'SHOW_NOTION_ICON_PANEL':
         this.current = 0;
         const { tab, tabs, tabsBar, panelContainer } = await getIconPanel();
+        this.icon = getIcon();
         this.mask = getPanelMask();
         if(this.panelContainer === panelContainer) return;
         this.tab = tab;
@@ -101,8 +105,8 @@ export default class Observer {
     document.addEventListener('click', (event)=>{
       const path:HTMLElement[] = (<any>event).path;
       const isIcon = path.find(element => element?.className?.indexOf?.(ICON_CLASS)>=0);
-      const isContent = path.find(element => element?.className?.indexOf?.(PAGE_CONTENT)>=0);
-      const isSideBar = path.find(element => element?.className?.indexOf?.(SIDEBAR)>=0);
+      const isContent = path.find(element => element?.className?.indexOf?.(PAGE_CONTENT_CLASS)>=0);
+      const isSideBar = path.find(element => element?.className?.indexOf?.(SIDEBAR_CLASS)>=0);
       if(isIcon&&!isContent&&!isSideBar){
         this.dispatch('SHOW_NOTION_ICON_PANEL')
       }

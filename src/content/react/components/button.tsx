@@ -17,6 +17,7 @@ const primarySytle = `
   justify-content: center;
   padding: 0 12px;
   color:#fff;
+  font-weight: 500;
   background: rgb(46, 170, 220);
   &:hover {
     background: rgb(6, 156, 205);
@@ -42,7 +43,6 @@ export default styled(Button)<ButtonProps>(({theme:{button}, type="default"})=>`
   height: 28px;
   border-radius: 3px;
   font-size: 14px;
-  font-weight: 500;
   line-height: 1.2;
   min-width: 0px;
   transition: background 20ms ease-in 0s;
