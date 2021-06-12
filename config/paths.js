@@ -1,8 +1,8 @@
-const path = require("path");
+const path = require('path');
 
-const src = path.join(__dirname, "../src");
+const src = path.join(__dirname, '../src');
 
-const resolveSrc = _path => path.resolve(src, _path)
+const resolveSrc = (_path) => path.resolve(src, _path);
 
 module.exports = {
   src,
@@ -11,5 +11,5 @@ module.exports = {
   popup: resolveSrc('popup/index.tsx'),
   popupHtml: resolveSrc('../public/popup.html'),
   backgroundClient: resolveSrc('hot-client/background.ts'),
-  build: path.join(__dirname, "../dist")
-}
+  build: path.join(__dirname, '../dist'),
+};

@@ -1,29 +1,27 @@
-import { getUUID } from "@/lib/utils";
+import { getUUID } from '@/lib/utils';
 
-export function getQueryString(name:string, href = location.href) {
-  const reg = new RegExp('(\\?|&)' + name + '=([^&^#]*)(&|$|#)', 'i');
+export function getQueryString(name:string, href = window.location.href) {
+  const reg = new RegExp(`(\\?|&)${name}=([^&^#]*)(&|$|#)`, 'i');
   const r = href.match(reg);
   if (r !== null) return decodeURIComponent(r[2]);
   return null;
 }
 
 interface Theme {
-  mode:"light"|"dark"
+  mode:'light' | 'dark'
 }
-export function getTheme():Theme{
+export function getTheme():Theme {
   const theme = localStorage.getItem('theme');
-  try{
+  try {
     return theme ? JSON.parse(theme) : { mode: 'light' };
-  }catch(e){
-    return { mode: 'light' }
+  } catch (e) {
+    return { mode: 'light' };
   }
 }
 
-export const parseClassName = (...classname: (string|undefined)[]) => {
-  return classname.filter(Boolean).join(' ');
-}
+export const parseClassName = (...classname: (string | undefined)[]) => classname.filter(Boolean).join(' ');
 
-export function chooseFile(accept = 'image/*', multiple = false):Promise<File[]|File|undefined|null> {
+export function chooseFile(accept = 'image/*', multiple = false):Promise<File[] | File | undefined | null> {
   const input = document.createElement('input');
   input.type = 'file';
   input.accept = accept || '';
@@ -38,20 +36,20 @@ export function chooseFile(accept = 'image/*', multiple = false):Promise<File[]|
     let times = 0;
     let isChange = false;
     input.onfocus = () => {
-      times++;
-      if(times < 2) return;
-      setTimeout(()=>{
-        if(!isChange) reject();
+      times += 1;
+      if (times < 2) return;
+      setTimeout(() => {
+        if (!isChange) reject();
         document.body.removeChild(input);
-      },100)
-    }
+      }, 100);
+    };
     input.onchange = () => {
       isChange = true;
-      if(input.files&&input.files.item(0)){
-        if(multiple) resolve(Array.from(input.files));
+      if (input.files && input.files.item(0)) {
+        if (multiple) resolve(Array.from(input.files));
         else resolve(input.files.item(0));
-      }else{
-        reject()
+      } else {
+        reject();
       }
     };
     input.focus();
@@ -59,10 +57,10 @@ export function chooseFile(accept = 'image/*', multiple = false):Promise<File[]|
   });
 }
 
-export function getCurrentPageId(){
-  const href = location.href;
+export function getCurrentPageId() {
+  const { href } = window.location;
   const subPageString = getQueryString('p', href);
   const subPageId = subPageString && getUUID(subPageString);
-  if(subPageId) return subPageId;
-  else return getUUID(href);
+  if (subPageId) return subPageId;
+  return getUUID(href);
 }

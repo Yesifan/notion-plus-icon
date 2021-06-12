@@ -1,9 +1,10 @@
-const { merge } = require("webpack-merge");
+/* eslint-disable import/no-extraneous-dependencies */
+const { merge } = require('webpack-merge');
 
-const base = require("./webpack.config");
-const ResetEntryPlugin = require("./reset-entry-plugin");
+const base = require('./webpack.config');
+const ResetEntryPlugin = require('./reset-entry-plugin');
 
-const paths = require("./paths");
+const paths = require('./paths');
 
 const config = merge(base, {
   mode: 'development',
@@ -13,27 +14,27 @@ const config = merge(base, {
     background: [paths.backgroundClient, paths.background],
   },
   devtool: 'cheap-module-source-map',
-  devServer:{
-    hot:true,
+  devServer: {
+    hot: true,
     hotOnly: true,
     port: 3333,
     writeToDisk: true,
     transportMode: 'ws',
-    disableHostCheck: true
+    disableHostCheck: true,
   },
-  plugins:[
+  plugins: [
     new ResetEntryPlugin({
-      transform(name, value){
-        if(name === 'content'){
+      transform(name, value) {
+        if (name === 'content') {
           return {
             ...value,
             import: [paths.content],
-          }
+          };
         }
         return value;
-      }
-    })
-  ]
+      },
+    }),
+  ],
 });
 
 module.exports = config;

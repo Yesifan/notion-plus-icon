@@ -10,11 +10,11 @@ export const Container = styled.div`
   position: relative;
   border-radius: 3px;
   box-shadow: rgb(15 15 15 / 10%) 0px 0px 0px 1px inset;
-  background: ${({theme})=>theme.input.background};
+  background: ${({ theme }) => theme.input.background};
   cursor: text;
   height: 28px;
   margin: 0px 2px 0px 8px;
-`
+`;
 
 export const Input = styled.input`
   font-size: inherit;
@@ -25,4 +25,4 @@ export const Input = styled.input`
   display: block;
   resize: none;
   padding: 0px;
-`
+`;

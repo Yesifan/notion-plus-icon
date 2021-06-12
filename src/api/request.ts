@@ -1,26 +1,24 @@
-interface Request extends Omit<RequestInit, 'body'>{
+interface Request extends Omit<RequestInit, 'body' | 'headers'>{
   body?: BodyInit | any;
+  headers?: {
+    [name:string]: string
+  }
 }
 
-export function fetcher<Res>(input: string, init?: Request):Promise<Res>{
-  if(init){
-  let { body, headers, ...options } = init;
-    const _headers = {
+export function fetcher<Res>(input: string, init: Request = {}):Promise<Res> {
+  const requestInit = {
+    ...init,
+    body: init.headers?.['content-type'] ? init.body : JSON.parse(init.body),
+    headers: {
       'content-type': 'application/json',
-      ...(headers ? headers : {})
-    }
-    const _body = _headers['content-type'] === 'application/json' ? JSON.stringify(body) : body
-    init = {
-      body: _body,
-      headers: _headers,
-      ...options
-    }
-  }
+      ...(init.headers || {}),
+    },
+  };
 
-  return fetch(input, init as RequestInit)
-  .then(r => {
-    const isJSON = r.headers.get('content-type')?.includes('json');
-    if(isJSON) return r.json();
-    else return r;
-  })
+  return fetch(input, requestInit as RequestInit)
+    .then((r) => {
+      const isJSON = r.headers.get('content-type')?.includes('json');
+      if (isJSON) return r.json();
+      return r;
+    });
 }

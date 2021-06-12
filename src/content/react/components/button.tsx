@@ -1,17 +1,18 @@
-import styled from "@emotion/styled";
+/* eslint-disable no-nested-ternary */
+import styled from '@emotion/styled';
 
-import { parseClassName } from "@/content/lib/utils";
+import { parseClassName } from '@/content/lib/utils';
 
-const Button:React.FC<React.HTMLAttributes<HTMLDivElement>> = ({children, className,...props}) => {
-  return (
-    <div role="button" tabIndex={-1} className={parseClassName("notion-focusable", className)} {...props}>
-      {children}
-    </div>
-  )
-}
+type DivProps = React.HTMLAttributes<HTMLDivElement>;
+
+const Button:React.FC<DivProps> = ({ children, className, ...props }) => (
+  <div role="button" tabIndex={-1} className={parseClassName('notion-focusable', className)} {...props}>
+    {children}
+  </div>
+);
 
 interface ButtonProps{
-  type?: 'primary'|'radius'|'default'
+  type?: 'primary' | 'radius' | 'default'
 }
 const primarySytle = `
   justify-content: center;
@@ -28,12 +29,12 @@ const primarySytle = `
   &:active {
     background: rgb(6, 156, 205);
   }
-`
+`;
 const radiusStyle = `
   height: auto;
   border-radius: 20px;
-`
-export default styled(Button)<ButtonProps>(({theme:{button}, type="default"})=>`
+`;
+export default styled(Button)<ButtonProps>(({ theme: { button }, type = 'default' }) => `
   user-select: none;
   cursor: pointer;
   display: inline-flex;
@@ -55,5 +56,5 @@ export default styled(Button)<ButtonProps>(({theme:{button}, type="default"})=>`
   &:active {
     background: ${button.color};
   }
-  ${type==='primary' ? primarySytle : type==='radius' ? radiusStyle : null}
-`)
+  ${type === 'primary' ? primarySytle : type === 'radius' ? radiusStyle : null}
+`);
