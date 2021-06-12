@@ -1,17 +1,13 @@
 {
   "compilerOptions": {
-      "outDir": "./dist/",
-      "sourceMap": true,
-      "strict": true,
-      "noImplicitReturns": true,
-      "noImplicitAny": true,
-      "module": "esnext",
-      "moduleResolution": "node",
-      "target": "es5",
-      "jsx": "react-jsx",
-      "baseUrl": ".",
-      "paths": {
-        "@/*": [ "./src/*"]
-      }
-  }
+    "strict": true,
+    "sourceMap": true,
+    "module": "esnext",
+    "target": "es5",
+    "jsx": "react-jsx",
+    "outDir": "./dist/",
+    "paths": {
+      "@/*": [ "./src/*"]
+    }
+  },
 }
