@@ -1,7 +1,7 @@
-export type CreateType = "notion_user";
-export type UserType = "bot_permission"|"space_permission";
-export type PageType = "collection_view_page"|"page"|"space";
-export type RoleType = "editor"|"comment_only"|"read_and_write";
+export type CreateType = 'notion_user';
+export type UserType = 'bot_permission' | 'space_permission';
+export type PageType = 'collection_view_page' | 'page' | 'space';
+export type RoleType = 'editor' | 'comment_only' | 'read_and_write';
 
 export interface PublicPageData {
   spaceName: string,

@@ -1,6 +1,7 @@
 import { render } from 'react-dom';
-import { ThemeProvider } from '@emotion/react'
+import { ThemeProvider } from '@emotion/react';
 
+import { light, dark } from '@/theme';
 import Observer, { Provider } from './observer';
 
 import Tab from './react/tab';
@@ -9,16 +10,14 @@ import Loading from './react/icon-loading';
 
 import { getCurrentPageId, getTheme } from './lib/utils';
 
-import { light, dark } from '@/theme';
-
 const { runtime } = chrome;
 
 const pageId = getCurrentPageId();
 const observer = new Observer(pageId);
 
-runtime.onMessage.addListener(()=>{
+runtime.onMessage.addListener(() => {
   const pageId = getCurrentPageId();
-  observer.dispatch("PAGE_CHANGE", pageId);
+  observer.dispatch('PAGE_CHANGE', pageId);
 });
 
 const App = () => {
@@ -27,15 +26,15 @@ const App = () => {
   return (
     <Provider observer={observer}>
       <ThemeProvider theme={theme}>
-        <Tab/>
-        <Panel/>
-        <Loading/>
+        <Tab />
+        <Panel />
+        <Loading />
       </ThemeProvider>
     </Provider>
-  )
-}
+  );
+};
 
 const container = document.createElement('div');
 document.body.appendChild(container);
 
-render(<App/>, container);
+render(<App />, container);

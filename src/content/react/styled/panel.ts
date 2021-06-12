@@ -1,6 +1,6 @@
-import styled from "@emotion/styled";
+import styled from '@emotion/styled';
 
-export const Title = styled.div(({theme})=>`
+export const Title = styled.div(({ theme }) => `
   display: flex;
   padding-left: 14px;
   padding-right: 14px;
@@ -12,4 +12,4 @@ export const Title = styled.div(({theme})=>`
   line-height: 120%;
   user-select: none;
   text-transform: uppercase;
-`)
+`);
