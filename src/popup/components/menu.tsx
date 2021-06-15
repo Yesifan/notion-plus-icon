@@ -1,19 +1,47 @@
 import styled from '@emotion/styled';
 
-const Menu = styled.div`
-  width: 160px;
-  display: flex;
-  flex-direction: column;
-  background: ${({ theme }) => theme.menu.background};
+interface GroupProps extends React.HTMLAttributes<HTMLDivElement> {
+  title?: string
+}
+
+const Title = styled.div`
+  color:${({ theme }) => theme.subColor};
+  margin-bottom: 2px;
 `;
 
-export const Group = styled.div`
+const GroupApp:React.FC<GroupProps> = ({ children, title, ...props }) => (
+  <div {...props}>
+    <Title>
+      {title}
+    </Title>
+    { children }
+  </div>
+);
+
+export const Group = styled(GroupApp)`
   display: flex;
   flex-direction: column;
-  padding: 6px;
+  margin-bottom: 4px;
 `;
 
-const A = styled.a`
+const Img = styled.img`
+  width: 18px;
+  height: 18px;
+  padding-right: 6px;
+`;
+
+interface ItemProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
+  icon?: string
+}
+
+const ItemElement:React.FC<ItemProps> = ({ children, icon, ...props }) => (
+  <a {...props}>
+    <Img src={icon} />
+    {children}
+  </a>
+);
+
+export const Item = styled(ItemElement)`
   display: flex;
   align-items: center;
   padding: 6px 8px;
@@ -29,23 +57,12 @@ const A = styled.a`
   }
 `;
 
-const Img = styled.img`
-  width: 18px;
-  height: 18px;
-  padding-right: 6px;
+const Menu = styled.div`
+  width: 160px;
+  display: flex;
+  padding: 6px 8px;
+  flex-direction: column;
+  background: ${({ theme }) => theme.menu.background};
 `;
-
-type AProps = Parameters<typeof A>[0];
-
-interface ItemProps {
-  icon?: string
-}
-
-export const Item:React.FC<ItemProps & AProps> = ({ children, icon, ...props }) => (
-  <A {...props}>
-    <Img src={icon} />
-    {children}
-  </A>
-);
 
 export default Menu;

@@ -2,12 +2,13 @@
   "compilerOptions": {
     "strict": true,
     "sourceMap": true,
-    "module": "esnext",
     "target": "es5",
+    "module": "esnext",
     "jsx": "react-jsx",
     "outDir": "./dist/",
     "paths": {
       "@/*": [ "./src/*"]
-    }
+    },
+    "moduleResolution": "node"
   },
 }
