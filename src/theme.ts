@@ -10,7 +10,7 @@ export const light = {
   menu: {
     color: 'rgba(0, 0, 0, 0.9)',
     background: 'rgb(247, 246, 243)',
-    hoverColor: 'rgb(71, 76, 80)',
+    hoverColor: 'rgba(55, 53, 47, 0.08)',
   },
   button: {
     color: 'rgba(55, 53, 47, 0.08)',
