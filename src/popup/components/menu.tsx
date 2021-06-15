@@ -24,10 +24,10 @@ export const Group = styled(GroupApp)`
   margin-bottom: 4px;
 `;
 
-const Img = styled.img`
+const Icon = styled.img`
   width: 18px;
   height: 18px;
-  padding-right: 6px;
+  margin-right: 6px;
 `;
 
 interface ItemProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
@@ -36,7 +36,7 @@ interface ItemProps extends React.AnchorHTMLAttributes<HTMLAnchorElement> {
 
 const ItemElement:React.FC<ItemProps> = ({ children, icon, ...props }) => (
   <a {...props}>
-    <Img src={icon} />
+    {icon && <Icon src={icon} />}
     {children}
   </a>
 );
