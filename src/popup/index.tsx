@@ -5,12 +5,11 @@ import { ThemeProvider } from '@emotion/react';
 import { light, dark } from '@/theme';
 import {
   star,
+  tutorials,
   github, github_dark,
   changelog, changelog_dark,
 } from '@/icons';
 import Menu, { Group, Item } from './components/menu';
-
-const icon = chrome.runtime.getURL('/icon@48.png');
 
 const REPOSITORY_URL = 'https://github.com/Yesifan/notion-plus-icon';
 const ISSUES_URL = 'https://github.com/Yesifan/notion-plus-icon/issues';
@@ -35,8 +34,16 @@ const App = () => {
   return (
     <ThemeProvider theme={isDark ? dark : light}>
       <Menu>
+        <Group title="Setting">
+          <Item href={TUTORIALS} target="_blank">
+            Notion Link Tab
+          </Item>
+          <Item href={TUTORIALS} target="_blank">
+            Notion Image Tab
+          </Item>
+        </Group>
         <Group title="Info">
-          <Item href={TUTORIALS} target="_blank" icon={icon}>
+          <Item href={TUTORIALS} target="_blank" icon={tutorials}>
             Tutorials
           </Item>
           <Item href={CHANGELOG} target="_blank" icon={isDark ? changelog_dark : changelog}>
