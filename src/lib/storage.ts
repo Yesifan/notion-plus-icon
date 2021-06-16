@@ -1,11 +1,19 @@
 const { storage } = chrome;
 
 export const ICON_STORAGE_KEY = 'NOTION_PLUS_ICON_URLS';
+export const SETTING_STORAGE_KEY = 'NOTION_PLUS_ICON_SETTING';
 
-export function getStorage<T>(key:string) {
-  return new Promise<T>((resolve) => {
+export function getStorage<T>(key:string):Promise<T>;
+export function getStorage<T>(keys:string[]): Promise<T>;
+export function getStorage<T>(key:string | string[]):Promise<T> {
+  return new Promise<any>((resolve) => {
     storage.sync.get(key, (items) => {
-      resolve(items[key]);
+      if (typeof key === 'string') {
+        resolve(items[key]);
+      } else {
+        const value = key.map((k) => items[k]);
+        resolve(value);
+      }
     });
   });
 }

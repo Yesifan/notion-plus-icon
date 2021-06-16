@@ -1,4 +1,3 @@
-import { useEffect, useState } from 'react';
 import { render } from 'react-dom';
 import { ThemeProvider } from '@emotion/react';
 
@@ -9,6 +8,7 @@ import {
   changelog, changelog_dark,
 } from '@/icons';
 import { light, dark } from '@/theme';
+import { useDark, useSetting } from '@/lib/hooks';
 import Menu, { Group, LinkItem, SwitchItem } from './components/menu';
 
 const REPOSITORY_URL = 'https://github.com/Yesifan/notion-plus-icon';
@@ -17,28 +17,28 @@ const TUTORIALS = 'https://www.notion.so/yeseth/NOTION-PLUS-ICON-Tutorials-8e54d
 const CHANGELOG = 'https://www.notion.so/yeseth/NOTION-PLUS-ICON-Changelog-647c37f1a7e045b2839735bb02a7b28a';
 
 const App = () => {
-  const [isDark, setDark] = useState(
-    window.matchMedia('(prefers-color-scheme: dark)').matches,
-  );
-  useEffect(() => {
-    const media = window.matchMedia('(prefers-color-scheme: dark)');
-    const callback = (e:MediaQueryListEvent) => {
-      const prefersDarkMode = e.matches;
-      if (prefersDarkMode) setDark(true);
-      else setDark(false);
+  const isDark = useDark();
+  const [setting, setSetting] = useSetting();
+  const { link, image } = setting?.notion || {};
+  const updateSetting = (key:'link' | 'image') => {
+    const newValue = {
+      ...setting,
+      notion: {
+        ...setting.notion,
+        link: key === 'link' ? !link : !!link,
+        image: key === 'image' ? !image : !!image,
+      },
     };
-    media.addEventListener('change', callback);
-    return () => media.removeEventListener('change', callback);
-  }, []);
-
+    setSetting(newValue);
+  };
   return (
     <ThemeProvider theme={isDark ? dark : light}>
       <Menu>
         <Group title="Setting">
-          <SwitchItem>
+          <SwitchItem checkd={link} onClick={() => updateSetting('link')}>
             Notion Link Tab
           </SwitchItem>
-          <SwitchItem checkd>
+          <SwitchItem checkd={image} onClick={() => updateSetting('image')}>
             Notion Image Tab
           </SwitchItem>
         </Group>
