@@ -8,7 +8,7 @@ interface Request extends Omit<RequestInit, 'body' | 'headers'>{
 export function fetcher<Res>(input: string, init: Request = {}):Promise<Res> {
   const requestInit = {
     ...init,
-    body: init.headers?.['content-type'] ? init.body : JSON.parse(init.body),
+    body: init.headers?.['content-type'] ? init.body : JSON.stringify(init.body),
     headers: {
       'content-type': 'application/json',
       ...(init.headers || {}),
