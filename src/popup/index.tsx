@@ -2,14 +2,14 @@ import { useEffect, useState } from 'react';
 import { render } from 'react-dom';
 import { ThemeProvider } from '@emotion/react';
 
-import { light, dark } from '@/theme';
 import {
   star,
   tutorials,
   github, github_dark,
   changelog, changelog_dark,
 } from '@/icons';
-import Menu, { Group, Item } from './components/menu';
+import { light, dark } from '@/theme';
+import Menu, { Group, LinkItem, SwitchItem } from './components/menu';
 
 const REPOSITORY_URL = 'https://github.com/Yesifan/notion-plus-icon';
 const ISSUES_URL = 'https://github.com/Yesifan/notion-plus-icon/issues';
@@ -17,15 +17,15 @@ const TUTORIALS = 'https://www.notion.so/yeseth/NOTION-PLUS-ICON-Tutorials-8e54d
 const CHANGELOG = 'https://www.notion.so/yeseth/NOTION-PLUS-ICON-Changelog-647c37f1a7e045b2839735bb02a7b28a';
 
 const App = () => {
-  const [isDark, setIsDark] = useState(
+  const [isDark, setDark] = useState(
     window.matchMedia('(prefers-color-scheme: dark)').matches,
   );
   useEffect(() => {
     const media = window.matchMedia('(prefers-color-scheme: dark)');
     const callback = (e:MediaQueryListEvent) => {
       const prefersDarkMode = e.matches;
-      if (prefersDarkMode) setIsDark(true);
-      else setIsDark(false);
+      if (prefersDarkMode) setDark(true);
+      else setDark(false);
     };
     media.addEventListener('change', callback);
     return () => media.removeEventListener('change', callback);
@@ -35,28 +35,28 @@ const App = () => {
     <ThemeProvider theme={isDark ? dark : light}>
       <Menu>
         <Group title="Setting">
-          <Item href={TUTORIALS} target="_blank">
+          <SwitchItem>
             Notion Link Tab
-          </Item>
-          <Item href={TUTORIALS} target="_blank">
+          </SwitchItem>
+          <SwitchItem checkd>
             Notion Image Tab
-          </Item>
+          </SwitchItem>
         </Group>
         <Group title="Info">
-          <Item href={TUTORIALS} target="_blank" icon={tutorials}>
+          <LinkItem href={TUTORIALS} target="_blank" icon={tutorials}>
             Tutorials
-          </Item>
-          <Item href={CHANGELOG} target="_blank" icon={isDark ? changelog_dark : changelog}>
+          </LinkItem>
+          <LinkItem href={CHANGELOG} target="_blank" icon={isDark ? changelog_dark : changelog}>
             Changelog
-          </Item>
+          </LinkItem>
         </Group>
         <Group title="Repository">
-          <Item href={REPOSITORY_URL} target="_blank" icon={star}>
+          <LinkItem href={REPOSITORY_URL} target="_blank" icon={star}>
             Give Me A Star
-          </Item>
-          <Item href={ISSUES_URL} target="_blank" icon={isDark ? github_dark : github}>
+          </LinkItem>
+          <LinkItem href={ISSUES_URL} target="_blank" icon={isDark ? github_dark : github}>
             Welcome to issues!
-          </Item>
+          </LinkItem>
         </Group>
       </Menu>
     </ThemeProvider>
