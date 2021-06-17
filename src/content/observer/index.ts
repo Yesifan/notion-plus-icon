@@ -1,7 +1,6 @@
-import storage, { getStorage, ICON_STORAGE_KEY, SETTING_STORAGE_KEY } from '@/lib/storage';
+import storage, { getStorage, SETTING_STORAGE_KEY } from '@/lib/storage';
 
 import { Setting } from '@/interface/setting';
-import { Icons } from '../lib/notion';
 import {
   getIconPanel, getPanelMask, ICON_CLASS, SIDEBAR_CLASS, PAGE_CONTENT_CLASS, getIcon,
 } from '../lib/dom';
@@ -15,8 +14,6 @@ interface Callback {
 
 export default class Observer {
   pageId?:string;
-
-  icons: Icons = { default: [] };
 
   setting: Setting = {};
 
@@ -69,9 +66,6 @@ export default class Observer {
         if (this.panelContainer) changeNotionPanel(this.panelContainer, isPlus);
         break;
       }
-      case 'ICONS_CHANGE':
-        this.icons = payload || { default: [] };
-        break;
       case 'SETTING_CHANGE':
         this.setting = payload || {};
         this.hidePanelTab();
@@ -109,17 +103,9 @@ export default class Observer {
   }
 
   private async storageObserver() {
-    const [icons, setting] = await getStorage<[Icons, Setting]>([
-      ICON_STORAGE_KEY,
-      SETTING_STORAGE_KEY,
-    ]);
-    this.dispatch('ICONS_CHANGE', icons);
+    const setting = await getStorage<Setting>(SETTING_STORAGE_KEY);
     this.dispatch('SETTING_CHANGE', setting);
     storage.onChanged.addListener((changes) => {
-      if (changes[ICON_STORAGE_KEY]) {
-        const { newValue } = changes[ICON_STORAGE_KEY];
-        this.dispatch('ICONS_CHANGE', newValue);
-      }
       if (changes[SETTING_STORAGE_KEY]) {
         const { newValue } = changes[SETTING_STORAGE_KEY];
         this.dispatch('SETTING_CHANGE', newValue);

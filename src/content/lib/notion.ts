@@ -20,6 +20,8 @@ export interface Icons {
   [id:string]:Icon[]
 }
 
+export const ICONS_DEFAULT = { default: [] };
+
 export async function cacheIconUrl(src:string, url:string, id:string = 'default') {
   const timestamp = new Date().valueOf();
   const icons = await getStorage<Icons>(ICON_STORAGE_KEY);

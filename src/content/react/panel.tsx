@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from '@/content/observer';
 
 import { Panel, Ellipsis, Flex } from '@/content/react/styled';
 import { setPageIcon, Icon as IconProps } from '@/content/lib/notion';
+import { useStorageIcons } from '@/lib/hooks';
 import Icon from './components/icon';
 import UploadLink from './components/link';
 import Button from './components/button';
@@ -28,14 +29,16 @@ const SubTitle:React.FC = ({ children }) => (
 
 const App:React.FC = () => {
   const dispatch = useDispatch();
-  const [tab, icons, pageId, container] = useSelector((state) => [
-    state.current, state.icons, state.pageId, state.panelContainer,
+  const [icons] = useStorageIcons();
+  const [tab, pageId, container] = useSelector((state) => [
+    state.current, state.pageId, state.panelContainer,
   ]);
   const setIcon = useCallback(async (url:string, signedGetUrl:string, isUpload = false) => {
     dispatch('UPLOAD_CHANGE', true);
     dispatch('HIDE_NOTION_ICON_PANEL');
     return pageId && setPageIcon(pageId, url, signedGetUrl, isUpload);
   }, [pageId]);
+
   const iconRows = useMemo(() => {
     const linkIcons = icons.default || [];
     const pageIcons = icons[pageId!] || [];
