@@ -12,6 +12,7 @@ import Button from './components/button';
 import UploadFile from './components/upload';
 
 const ROW_SIZE = 12;
+const NOTION_STATIC_URL = 's3-us-west-2.amazonaws.com/secure.notion-static.com';
 
 const icon:React.CSSProperties = {
   width: '32px',
@@ -29,18 +30,22 @@ const SubTitle:React.FC = ({ children }) => (
 
 const App:React.FC = () => {
   const dispatch = useDispatch();
-  const [icons] = useStorageIcons();
+  const [icons, cacheIconUrl] = useStorageIcons();
   const [tab, pageId, container] = useSelector((state) => [
     state.current, state.pageId, state.panelContainer,
   ]);
   const setIcon = useCallback(async (url:string, signedGetUrl:string, isUpload = false) => {
-    dispatch('UPLOAD_CHANGE', true);
     dispatch('HIDE_NOTION_ICON_PANEL');
-    return pageId && setPageIcon(pageId, url, signedGetUrl, isUpload);
+    if (pageId) {
+      dispatch('UPLOAD_CHANGE', true);
+      await setPageIcon(pageId, url, isUpload);
+      const cacheId = url.includes(NOTION_STATIC_URL) ? pageId : 'default';
+      cacheIconUrl(signedGetUrl, url, cacheId);
+    }
   }, [pageId]);
 
-  const iconRows = useMemo(() => {
-    const linkIcons = icons.default || [];
+  const rows = useMemo(() => {
+    const linkIcons = icons.default;
     const pageIcons = icons[pageId!] || [];
     return [...linkIcons, ...pageIcons]
       .sort((a, b) => b.timestamp - a.timestamp)
@@ -63,7 +68,7 @@ const App:React.FC = () => {
         <div style={{ padding: '6px 0' }}>
           <SubTitle>Recent</SubTitle>
           <Flex column style={{ padding: '0 12px', marginBottom: '1px' }}>
-            {iconRows.map((row, index) => (
+            {rows.map((row, index) => (
               // eslint-disable-next-line react/no-array-index-key
               <Flex key={index}>
                 {row.map(({ src, url }) => (

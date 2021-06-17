@@ -9,7 +9,6 @@ import { loadCachedPageChunk, setIcon } from '@/api/notion';
 import * as Notion from '@/interface/notion';
 
 const chunkCache = new Map();
-const AWS_NOTION_STATIC_URL = 's3-us-west-2.amazonaws.com/secure.notion-static.com';
 export interface Icon {
   src:string,
   url:string,
@@ -56,21 +55,18 @@ export async function getChunkCache(pageId:string) {
 }
 
 export async function setPageIcon(
-  pageId:string, url:string, signedGetUrl:string, isUpload?:boolean,
+  pageId:string, url:string, isUpload?:boolean,
 ) {
   if (pageId) {
     const pageChunk = await getChunkCache(pageId);
     const blockInfo = pageChunk?.recordMap.block[pageId];
     if (blockInfo) {
       const { space_id, collection_id } = pageChunk.recordMap.block[pageId].value;
-      const cacheId = url.indexOf(AWS_NOTION_STATIC_URL) >= 0 ? pageId : 'default';
       if (isUpload) {
         const fileId = collection_id ? getUUID(url) : undefined;
-        await setIcon(url, pageId, space_id, collection_id, fileId);
-      } else {
-        await setIcon(url, pageId, space_id, collection_id);
+        return setIcon(url, pageId, space_id, collection_id, fileId);
       }
-      return cacheIconUrl(signedGetUrl, url, cacheId);
+      return setIcon(url, pageId, space_id, collection_id);
     }
   }
   return undefined;
