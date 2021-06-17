@@ -7,6 +7,7 @@ const Loading:React.FC<React.SVGProps<SVGSVGElement>> = (props) => (
 );
 
 const App = styled(Loading)<{ size?:number }>(({ size = 14 }) => `
+  fill:#fff;
   width: ${`${size}px`};
   height: ${`${size}px`};
 `);
