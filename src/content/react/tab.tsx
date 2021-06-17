@@ -19,7 +19,6 @@ const App:React.FC = () => {
     <Tab.Container>
       <Button onClick={handleClick} style={{ padding: '0 6px' }}>
         <Tab.Icon src={icon} />
-        {' '}
         Plus
       </Button>
       {tab === 'plus' && <Tab.Underline />}

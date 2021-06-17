@@ -38,8 +38,9 @@ export const useSetting = ():[Setting, (value:Setting)=>void] => {
   getStorage<Setting>(SETTING_STORAGE_KEY).then((value) => setSetting(value || {}));
 
   const setValue = (value:Setting) => {
+    const newValue = { ...setting, ...value };
     setStorage({
-      [SETTING_STORAGE_KEY]: value,
+      [SETTING_STORAGE_KEY]: newValue,
     });
   };
 
