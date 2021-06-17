@@ -21,15 +21,12 @@ const App = () => {
   const [setting, setSetting] = useSetting();
   const { link, image } = setting?.notion || {};
   const updateSetting = (key:'link' | 'image') => {
-    const newValue = {
-      ...setting,
+    setSetting({
       notion: {
-        ...setting.notion,
         link: key === 'link' ? !link : !!link,
         image: key === 'image' ? !image : !!image,
       },
-    };
-    setSetting(newValue);
+    });
   };
   return (
     <ThemeProvider theme={isDark ? dark : light}>

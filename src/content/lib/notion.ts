@@ -15,14 +15,14 @@ export interface Icon {
   url:string,
   timestamp: number
 }
-export interface StorageIcons {
+export interface Icons {
   default:Icon[]
   [id:string]:Icon[]
 }
 
 export async function cacheIconUrl(src:string, url:string, id:string = 'default') {
   const timestamp = new Date().valueOf();
-  const icons = await getStorage<StorageIcons>(ICON_STORAGE_KEY);
+  const icons = await getStorage<Icons>(ICON_STORAGE_KEY);
   if (icons) {
     if (icons[id]) {
       const filters = icons[id].filter((item) => url !== item.url);
@@ -36,9 +36,9 @@ export async function cacheIconUrl(src:string, url:string, id:string = 'default'
 }
 
 export async function removeIconUrl(src:string) {
-  const icons = await getStorage<StorageIcons>(ICON_STORAGE_KEY);
+  const icons = await getStorage<Icons>(ICON_STORAGE_KEY);
   if (icons) {
-    const newIcons = Object.entries(icons).reduce<StorageIcons>((acc, [key, value]) => {
+    const newIcons = Object.entries(icons).reduce<Icons>((acc, [key, value]) => {
       acc[key] = value ? value.filter((item) => item.src !== src) : [];
       return acc;
     }, { default: [] });
