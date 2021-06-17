@@ -39,7 +39,7 @@ export default class Observer {
 
   constructor(pageId:string) {
     this.storageObserver();
-    this.iconClickListener();
+    this.clickListener();
     this.dispatch('PAGE_CHANGE', pageId);
   }
 
@@ -89,11 +89,6 @@ export default class Observer {
         this.tabsBar = tabsBar;
         this.panelContainer = panelContainer;
         this.hidePanelTab();
-        this.tabs?.forEach((node, index) => {
-          node?.addEventListener('click', () => {
-            this.dispatch('TAB_CHANGE', index);
-          });
-        });
         break;
       }
       default:
@@ -113,9 +108,21 @@ export default class Observer {
     });
   }
 
-  private async iconClickListener() {
+  private async clickListener() {
     document.addEventListener('click', (event) => {
       const path = <HTMLElement[]>(<any>event).path;
+      if (this.tabs) {
+        if (this.tabs[0] && path.includes(<HTMLElement> this.tabs[0])) {
+          this.dispatch('TAB_CHANGE', 0);
+        }
+        if (this.tabs[1] && path.includes(<HTMLElement> this.tabs[1])) {
+          this.dispatch('TAB_CHANGE', 1);
+        }
+        if (this.tabs[2] && path.includes(<HTMLElement> this.tabs[2])) {
+          this.dispatch('TAB_CHANGE', 2);
+        }
+      }
+
       const isIcon = path.find(({ className }) => className?.indexOf?.(ICON_CLASS) >= 0);
       const isContent = path.find(({ className }) => className?.indexOf?.(PAGE_CONTENT_CLASS) >= 0);
       const isSideBar = path.find(({ className }) => className?.indexOf?.(SIDEBAR_CLASS) >= 0);
