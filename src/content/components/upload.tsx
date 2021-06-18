@@ -19,11 +19,13 @@ const App:React.FC<UploadProps> = ({ children, onUpload, ...props }) => {
   const handleClick = useCallback(async () => {
     setLoading(true);
     try {
+      console.log('file');
       const file = (await chooseFile()) as File;
       const data = await upload(pageId!, file);
       if (data) onUpload?.(data.url, data.signedGetUrl);
       setLoading(false);
     } catch (e) {
+      console.error(e);
       setLoading(false);
     }
   }, [pageId]);

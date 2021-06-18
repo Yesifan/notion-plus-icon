@@ -1,4 +1,4 @@
-import { getUUID } from '@/lib/utils';
+import { delay, getUUID } from '@/lib/utils';
 
 export function getQueryString(name:string, href = window.location.href) {
   const reg = new RegExp(`(\\?|&)${name}=([^&^#]*)(&|$|#)`, 'i');
@@ -35,13 +35,12 @@ export function chooseFile(accept = 'image/*', multiple = false):Promise<File[] 
   return new Promise((resolve, reject) => {
     let times = 0;
     let isChange = false;
-    input.onfocus = () => {
+    input.onfocus = async () => {
       times += 1;
       if (times < 2) return;
-      setTimeout(() => {
-        if (!isChange) reject();
-        document.body.removeChild(input);
-      }, 100);
+      await delay(500);
+      if (!isChange) reject(new Error('no file'));
+      document.body.removeChild(input);
     };
     input.onchange = () => {
       isChange = true;
@@ -49,7 +48,7 @@ export function chooseFile(accept = 'image/*', multiple = false):Promise<File[] 
         if (multiple) resolve(Array.from(input.files));
         else resolve(input.files.item(0));
       } else {
-        reject();
+        reject(new Error('no file'));
       }
     };
     input.focus();
