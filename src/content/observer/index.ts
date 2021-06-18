@@ -38,8 +38,8 @@ export default class Observer {
   private observers: Callback[] = [];
 
   constructor(pageId:string) {
-    this.storageObserver();
     this.clickListener();
+    this.storageObserver();
     this.dispatch('PAGE_CHANGE', pageId);
   }
 

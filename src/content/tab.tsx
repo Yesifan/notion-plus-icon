@@ -2,8 +2,8 @@ import { createPortal } from 'react-dom';
 
 import { useSelector, useDispatch } from '@/content/observer';
 
-import Button from '@/content/react/components/button';
-import { Tab } from '@/content/react/styled';
+import Button from '@/content/components/button';
+import { Tab } from '@/content/styled';
 
 const icon = chrome.runtime.getURL('/icon@48.png');
 

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { Flex } from '@/content/react/styled';
+import { Flex } from '@/content/styled';
 import styled from '@emotion/styled';
 import Input from './input';
 import Button from './button';
