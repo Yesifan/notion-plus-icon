@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 
 import { useSelector, useDispatch } from '@/content/observer';
 
-import { Panel, Ellipsis, Flex } from '@/content/react/styled';
+import { Panel, Ellipsis, Flex } from '@/content/styled';
 import { setPageIcon, Icon as IconProps } from '@/content/lib/notion';
 import { useStorageIcons } from '@/lib/hooks';
 import Icon from './components/icon';

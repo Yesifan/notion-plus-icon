@@ -3,7 +3,7 @@ import { createPortal } from 'react-dom';
 
 import { Loading } from '@/icons';
 import styled from '@emotion/styled';
-import { useDispatch, useSelector } from '../observer';
+import { useDispatch, useSelector } from './observer';
 
 const Container = styled.div`
   position: absolute;

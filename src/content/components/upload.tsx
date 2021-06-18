@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react';
 import { useSelector } from '@/content/observer';
 
 import { Loading } from '@/icons';
-import { Ellipsis } from '@/content/react/styled';
+import { Ellipsis } from '@/content/styled';
 
 import { upload } from '@/content/lib/notion';
 import { chooseFile } from '@/content/lib/utils';

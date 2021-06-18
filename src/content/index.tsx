@@ -4,9 +4,9 @@ import { ThemeProvider } from '@emotion/react';
 import { light, dark } from '@/theme';
 import Observer, { Provider } from './observer';
 
-import Tab from './react/tab';
-import Panel from './react/panel';
-import Loading from './react/icon-loading';
+import Tab from './tab';
+import Panel from './panel';
+import Loading from './icon-loading';
 
 import { getCurrentPageId, getTheme } from './lib/utils';
 
